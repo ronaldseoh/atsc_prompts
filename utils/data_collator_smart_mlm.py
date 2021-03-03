@@ -4,7 +4,6 @@ from typing import Any, Callable, Dict, List, NewType, Optional, Tuple, Union
 import torch
 import transformers
 import spacy
-spacy.prefer_gpu()
 import tokenizations
 
 
