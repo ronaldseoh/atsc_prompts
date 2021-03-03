@@ -127,4 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+.DS_Store
+
+# zero_shot_atsc specific
+.ipynb_checkpoints/
+bert_base_cache/
+dataset_cache/
+dataset_files/
 *.lock
