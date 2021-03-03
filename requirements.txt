@@ -1,0 +1,5 @@
+transformers==4.3.3
+datasets==1.2.1
+pytokenizations==0.8.2
+spacy[cuda111]==2.3.5
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.3.1/en_core_web_sm-2.3.1.tar.gz#egg=en_core_web_sm
