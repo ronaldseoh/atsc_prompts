@@ -73,6 +73,8 @@ class YelpRestaurants(datasets.GeneratorBasedBuilder):
 
                 if review["business_id"] not in restaurantIDs:
                     continue
+                elif len(review["text"]) == 0:
+                    continue
                 else:
                     yield review["review_id"], {
                         "id": review["review_id"],
