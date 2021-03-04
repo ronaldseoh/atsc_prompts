@@ -1,6 +1,5 @@
 name: zeroshotatsc
 channels:
-  - conda-forge
   - pytorch
   - intel
   - defaults
