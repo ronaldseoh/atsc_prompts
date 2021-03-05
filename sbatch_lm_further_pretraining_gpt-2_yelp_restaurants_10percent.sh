@@ -3,10 +3,10 @@
 #SBATCH -o gypsum_logs/stdout/lm_further_pretraining_gpt-2_yelp_restaurants_10percent_%j.txt
 #SBATCH -e gypsum_logs/stderr/lm_further_pretraining_gpt-2_yelp_restaurants_10percent_%j.err
 #SBATCH --ntasks=1
-#SBATCH --partition=1080ti-long
-#SBATCH --gres=gpu:4
-#SBATCH --mem=64GB
-#SBATCH --cpus-per-task=8
+#SBATCH --partition=2080ti-long
+#SBATCH --gres=gpu:2
+#SBATCH --mem=32GB
+#SBATCH --cpus-per-task=4
 
 eval "$(conda shell.bash hook)"
 conda activate zeroshotatsc
