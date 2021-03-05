@@ -12,12 +12,13 @@ eval "$(conda shell.bash hook)"
 conda activate zeroshotatsc
 
 EXPERIMENT_ID_PREFIX=lm_further_pretraining_bert_yelp_restaurants
+EXPERIMENT_USERNAME=$(whoami)
 EXPERIMENT_STARTTIME=`date +"%Y-%m-%d--%H_%M_%S"`
 
 papermill --autosave-cell-every 1200 --progress-bar --log-output --log-level INFO \
           ../lm_further_pretraining_bert_yelp_restaurants.ipynb \
-          ../gypsum_logs/${EXPERIMENT_ID_PREFIX}_${EXPERIMENT_STARTTIME}.ipynb \
-          -p experiment_id ${EXPERIMENT_ID_PREFIX}_${EXPERIMENT_STARTTIME} \
+          ../gypsum_logs/${EXPERIMENT_ID_PREFIX}_${EXPERIMENT_USERNAME}_${EXPERIMENT_STARTTIME}.ipynb \
+          -p experiment_id ${EXPERIMENT_ID_PREFIX}_${EXPERIMENT_USERNAME}_${EXPERIMENT_STARTTIME} \
           -p random_seed 696 \
           -p total_subset_proportion 1.0 \
           -p validation_dataset_proportion 0.1 \
