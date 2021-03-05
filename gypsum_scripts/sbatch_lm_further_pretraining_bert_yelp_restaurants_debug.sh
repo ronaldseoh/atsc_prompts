@@ -26,4 +26,3 @@ papermill --autosave-cell-every 1200 --progress-bar --log-output --log-level INF
           -p per_device_train_batch_size 28 \
           -p per_device_eval_batch_size 32 \
           -p weight_decay 0.01 \
-          /
