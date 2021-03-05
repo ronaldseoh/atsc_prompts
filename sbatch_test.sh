@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=lm_further_pretraining_bert_yelp_restaurants_debug
-#SBATCH -o ../gypsum_logs/stdout/lm_further_pretraining_bert_yelp_restaurants_debug_%j.txt
-#SBATCH -e ../gypsum_logs/stderr/lm_further_pretraining_bert_yelp_restaurants_debug_%j.err
+#SBATCH -o gypsum_logs/stdout/lm_further_pretraining_bert_yelp_restaurants_debug_%j.txt
+#SBATCH -e gypsum_logs/stderr/lm_further_pretraining_bert_yelp_restaurants_debug_%j.err
 #SBATCH --ntasks=1
 #SBATCH --partition=titanx-long
 #SBATCH --gres=gpu:2
@@ -16,8 +16,8 @@ EXPERIMENT_USERNAME=$(whoami)
 EXPERIMENT_STARTTIME=`date +"%Y-%m-%d--%H_%M_%S"`
 
 papermill --autosave-cell-every 1200 --progress-bar --log-output --log-level INFO \
-          ../lm_further_pretraining_bert_yelp_restaurants.ipynb \
-          ../gypsum_logs/${EXPERIMENT_ID_PREFIX}_${EXPERIMENT_USERNAME}_${EXPERIMENT_STARTTIME}.ipynb \
+          lm_further_pretraining_bert_yelp_restaurants.ipynb \
+          gypsum_logs/${EXPERIMENT_ID_PREFIX}_${EXPERIMENT_USERNAME}_${EXPERIMENT_STARTTIME}.ipynb \
           -p experiment_id ${EXPERIMENT_ID_PREFIX}_${EXPERIMENT_USERNAME}_${EXPERIMENT_STARTTIME} \
           -p random_seed 696 \
           -p total_subset_proportion 0.1 \
