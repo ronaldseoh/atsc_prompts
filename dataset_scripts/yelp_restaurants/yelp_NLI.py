@@ -3,6 +3,7 @@ import datasets
 import json
 import spacy
 from tqdm import tqdm
+import regex as re
 #This dataset code format has been converted from the HuggingFace SNLI dataset (https://github.com/huggingface/datasets/blob/master/datasets/snli/snli.py)
 
 _CITATION = """\
@@ -32,6 +33,10 @@ def get_sentences(document):
             real_sents.append(s_sanitized)
 
     return real_sents
+
+def get_words(sentence_string):
+    no_punc = re.sub("[^\w\s]", "", sentence_string)
+    return no_punc.split()
 
 class YelpRestaurants(datasets.GeneratorBasedBuilder):
 
@@ -112,7 +117,8 @@ class YelpRestaurants(datasets.GeneratorBasedBuilder):
                         sentence = sentences[i]
 
                         #We only want to look at sentences that have a high polarity word in them
-                        if any(word in sentence for word in pos_words) or any(word in sentence for word in neg_words):
+                        sentence_words = get_words(sentence)
+                        if any(word in sentence_words for word in pos_words) or any(word in sentence_words for word in neg_words):
 
                             #The hypothesis is the sentence with a high polarity word
                             hypothesis = sentence
