@@ -3,7 +3,7 @@
 #SBATCH -o gypsum_logs/stdout/lm_further_pretraining_gpt-2_yelp_restaurants_10percent_%j.txt
 #SBATCH -e gypsum_logs/stderr/lm_further_pretraining_gpt-2_yelp_restaurants_10percent_%j.err
 #SBATCH --ntasks=1
-#SBATCH --partition=2080ti-long
+#SBATCH --partition=1080ti-long
 #SBATCH --gres=gpu:2
 #SBATCH --mem=32GB
 #SBATCH --cpus-per-task=4
@@ -24,5 +24,5 @@ papermill --autosave-cell-every 1200 --progress-bar --log-output --log-level INF
           -p validation_dataset_proportion 0.1 \
           -p num_train_epochs 20 \
           -p per_device_train_batch_size 16 \
-          -p per_device_eval_batch_size 25 \
+          -p per_device_eval_batch_size 16 \
           -p weight_decay 0.01 \
