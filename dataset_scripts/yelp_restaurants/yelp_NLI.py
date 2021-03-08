@@ -53,7 +53,7 @@ class YelpRestaurants(datasets.GeneratorBasedBuilder):
             description=_DESCRIPTION,
             features=datasets.Features(
                 {
-                    "id": datasets.Value("string"),
+                    "review_id": datasets.Value("string"),
                     "premise": datasets.Value("string"),
                     "hypothesis": datasets.Value("string"),
                     "label": datasets.Value("string")
@@ -126,28 +126,29 @@ class YelpRestaurants(datasets.GeneratorBasedBuilder):
                     for i in range(len(sentences)):
                         sentence = sentences[i]
 
-                        #We only want to look at sentences that have a high polarity word in them
+                        # We only want to look at sentences that have a high polarity word in them
                         sentence_words = get_words(sentence)
+
                         if any(word in sentence_words for word in pos_words) or any(word in sentence_words for word in neg_words):
 
-                            #The hypothesis is the sentence with a high polarity word
+                            # The hypothesis is the sentence with a high polarity word
                             hypothesis = sentence
 
-                            #The premise is the rest of the review text
+                            # The premise is the rest of the review text
                             premise = " ".join(sentences[0:i]) + " ".join(sentences[i+1:])
 
-                            #Entailment with the current review text
-                            yield review["review_id"], {
-                                "id": review["review_id"],
+                            # Entailment with the current review text
+                            yield review["review_id"] + "_" + str(i), {
+                                "review_id": review["review_id"],
                                 "premise": premise,
                                 "hypothesis": hypothesis,
                                 "label": "entailment"
                             }
 
-                            #Neutral with the premise being the first sentence of the prvious review
+                            # Neutral with the premise being the first sentence of the previous sentence pair
                             if prev_sentences != []:
-                                yield review["review_id"], {
-                                    "id": review["review_id"],
+                                yield review["review_id"] + "_" + str(i) + "_neu", {
+                                    "review_id": review["review_id"],
                                     "premise": prev_sentences[0],
                                     "hypothesis": hypothesis,
                                     "label": "neutral"
