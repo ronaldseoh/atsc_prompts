@@ -21,10 +21,10 @@ nlp = spacy.load('en_core_web_sm')
 nlp.add_pipe(nlp.create_pipe('sentencizer'))
 
 def get_sentences(document):
-    sentences = []
-    counter = 0
     doc = nlp(document, disable=['parser', 'tagger', 'ner'])
+
     real_sents = []
+
     for s in doc.sents:
         s= s.text.strip()
         x = s.replace(' ', '').replace('\n', '')
