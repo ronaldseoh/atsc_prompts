@@ -94,12 +94,22 @@ class YelpRestaurants(datasets.GeneratorBasedBuilder):
 
         restaurantIDs = set(line.strip() for line in open(restaurant_ids_path))
 
-        pos_words = set(line.strip() for line in open(pos_sentiment_path))
-        neg_words = set(line.strip() for line in open(neg_sentiment_path))
+        with open(pos_sentiment_path, "r", encoding='utf-8') as positive_words_file:
+            pos_words = positive_words_file.readlines()
+            
+        pos_words = pos_words[30:] # The list starts from line 31
+        pos_words = [word.rstrip() for word in pos_words]
+            
+        with open(neg_sentiment_path, "r", encoding="iso-8859-1") as negative_words_file:
+            neg_words = negative_words_file.readlines()
+            
+        neg_words = neg_words[31:] # The list starts from line 32
+        neg_words = [word.rstrip() for word in neg_words]
 
         with open(filepath, encoding='utf-8') as f:
 
             prev_sentences = []
+
             for line in f:
                 review = json.loads(line)
 
