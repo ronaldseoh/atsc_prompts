@@ -136,4 +136,5 @@ bert_base_cache/
 dataset_cache/
 dataset_files/
 *.lock
-evaluation_notebooks/logit_models/
+trained_models/
+
