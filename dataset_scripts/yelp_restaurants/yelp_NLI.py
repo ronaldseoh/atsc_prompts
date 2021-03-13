@@ -145,7 +145,7 @@ class YelpRestaurants(datasets.GeneratorBasedBuilder):
                                 "label": "entailment"
                             }
 
-                            # Neutral with the premise being the first sentence of the previous sentence pair
+                            # Neutral with the premise being the first sentence of the previous review
                             if prev_sentences != []:
                                 yield review["review_id"] + "_" + str(i) + "_neu", {
                                     "review_id": review["review_id"],
