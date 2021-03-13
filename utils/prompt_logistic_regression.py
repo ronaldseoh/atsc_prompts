@@ -2,6 +2,31 @@ import torch
 
 
 # This is the classification model that was trained to convert hidden state values to a class prediction
+class SinglePromptLogitSentimentClassificationHead(torch.nn.Module):
+    def __init__(self, mlm, num_class, pseudo_label_words, mask_token_id):
+        super(SinglePromptLogitSentimentClassificationHead, self).__init__()
+
+        self.num_class = num_class
+        self.pseudo_label_words = pseudo_label_words
+        self.mask_token_id = mask_token_id
+
+        self.mlm = mlm
+
+    def forward(self, reviews_and_prompts):
+
+        mlm_outputs = self.mlm(**reviews_and_prompts)
+
+        # Figures out where the mask token was placed
+        masked_indexes = (reviews_and_prompts.data["input_ids"] == self.mask_token_id)
+
+        outputs = mlm_outputs.logits[masked_indexes]
+        
+        outputs = outputs[:, self.pseudo_label_words]
+
+        return torch.nn.functional.softmax(outputs, dim=1)
+
+
+# This is the classification model that was trained to convert hidden state values to a class prediction
 class MultiPromptSentimentClassificationHead(torch.nn.Module):
     def __init__(self, mlm, num_class, num_prompts, mask_token_id):
         super(MultiPromptSentimentClassificationHead, self).__init__()
