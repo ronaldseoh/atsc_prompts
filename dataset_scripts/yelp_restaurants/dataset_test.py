@@ -1,5 +1,11 @@
-from datasets import load_dataset
+import datasets
 
-dataset = load_dataset('load_yelp.py', data_files='yelp_academic_dataset_review.json')["train"]
+yelp = datasets.load_dataset(
+    './dataset_scripts/yelp_restaurants/yelp_restaurants.py',
+    data_files={
+        'train': 'dataset_files/yelp_restaurants/yelp_academic_dataset_review.json',
+        'restaurant_ids': 'dataset_files/yelp_restaurants/restaurantIDs.txt'
+    },
+    cache_dir='./dataset_cache')
 
-print(dataset[0])
+print(yelp["train"][0])
