@@ -1,7 +1,6 @@
 import torch
 
 
-# This is the classification model that was trained to convert hidden state values to a class prediction
 class SinglePromptLogitSentimentClassificationHead(torch.nn.Module):
     def __init__(self, mlm, num_class, pseudo_label_words, mask_token_id):
         super(SinglePromptLogitSentimentClassificationHead, self).__init__()
@@ -23,10 +22,9 @@ class SinglePromptLogitSentimentClassificationHead(torch.nn.Module):
         
         outputs = outputs[:, self.pseudo_label_words]
 
-        return torch.nn.functional.softmax(outputs, dim=1)
+        return outputs
 
 
-# This is the classification model that was trained to convert hidden state values to a class prediction
 class MultiPromptSentimentClassificationHead(torch.nn.Module):
     def __init__(self, mlm, num_class, num_prompts, mask_token_id):
         super(MultiPromptSentimentClassificationHead, self).__init__()
