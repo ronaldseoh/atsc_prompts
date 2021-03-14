@@ -69,3 +69,26 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
         outputs = self.linear(lr_inputs_batch)
 
         return outputs
+
+
+class NoPromptSentimentClassificationHead(torch.nn.Module):
+    def __init__(self, bert, num_class):
+        super(NoPromptSentimentClassificationHead, self).__init__()
+
+        self.num_class = num_class
+
+        self.bert = bert
+
+        self.linear = torch.nn.Linear(
+            self.bert.config.hidden_size, self.num_class)
+
+    def forward(self, reviews_and_prompts):
+
+        bert_outputs = self.bert(**reviews_and_prompts)
+
+        # Last hidden state for [CLS] token
+        last_hidden_state_cls = bert_outputs["last_hidden_state"][:, 0, :]
+        
+        outputs = self.linear(last_hidden_state_cls)
+
+        return outputs
