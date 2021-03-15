@@ -135,5 +135,7 @@ dmypy.json
 bert_base_cache/
 dataset_cache/
 dataset_files/
-*.lock
+trained_models/
+progress/
 .vscode/
+*.lock
