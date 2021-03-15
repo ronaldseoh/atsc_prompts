@@ -26,40 +26,71 @@ class SinglePromptLogitSentimentClassificationHead(torch.nn.Module):
 
 
 class MultiPromptSentimentClassificationHead(torch.nn.Module):
-    def __init__(self, mlm, num_class, num_prompts, mask_token_id):
+    def __init__(self, lm, num_class, num_prompts, target_token_id=-1):
         super(MultiPromptSentimentClassificationHead, self).__init__()
 
         self.num_class = num_class
         self.num_prompts = num_prompts
-        self.mask_token_id = mask_token_id
+        self.target_token_id = target_token_id
 
-        self.mlm = mlm
+        self.lm = lm
+        
+        # Is self.lm BERT or GPT-2?
+        if self.lm.config.architectures[0].startswith('BERT'):
+            # if self.lm is BERT, then mask_token_id should be specified
+            assert target_token_id != -1
+            self.lm_type = 'bert'
+        elif self.lm.config.architectures[0].startswith('GPT2'):
+            self.lm_type = 'gpt2'
+        else:
+            raise Exception('Unsupported language model type.')
 
+        print("Detected LM type:", self.lm_type)
+
+        # Linear layer
         self.linear = torch.nn.Linear(
-            self.num_prompts * self.mlm.config.hidden_size, self.num_class)
+            self.num_prompts * self.lm.config.hidden_size, self.num_class)
 
     def forward(self, reviews_and_prompts):
 
-        mlm_outputs = self.mlm(**reviews_and_prompts, output_hidden_states=True)
-
-        # Figures out where the mask token was placed
-        masked_indexes = torch.nonzero(
-            reviews_and_prompts.data["input_ids"] == self.mask_token_id)[:, 1]
-
+        # Extract hidden states and feed them to self.linear
         outputs = []
 
         lr_inputs_batch = []
 
-        real_batch_size = len(reviews_and_prompts.data["input_ids"]) // self.num_prompts
+        # Figures out where the mask token was placed
+        if self.lm_type == 'bert':
+            # For BERT, we need to find the token in each input with [MASK]
+            target_indexes = torch.nonzero(
+                reviews_and_prompts.data["input_ids"] == self.target_token_id)[:, 1]
 
+            lm_outputs = self.lm(**reviews_and_prompts, output_hidden_states=True)
+
+            real_batch_size = len(reviews_and_prompts.data["input_ids"]) // self.num_prompts
+
+        elif self.lm_type == 'gpt2':
+            lm_outputs = []
+            target_indexes = []
+
+            # For GPT-2, we need to find the spot right after the input text
+            for example in reviews_and_prompts:
+                target_indexes.append(len(example['input_ids'][0]) - 1)
+
+                lm_outputs.append(self.lm(**example, output_hidden_states=True))
+
+            real_batch_size = len(reviews_and_prompts) // self.num_prompts
+                
         for i in range(real_batch_size):
             # Create an input to self.linear by
             # concatenating last hidden states for this review
             lr_input = []
 
             for j in range(self.num_prompts):
-                lr_input.append(mlm_outputs["hidden_states"][-1][i+real_batch_size*j][masked_indexes[i+real_batch_size*j]])
-
+                if self.lm_type == 'bert':
+                    lr_input.append(lm_outputs["hidden_states"][-1][i+real_batch_size*j][target_indexes[i+real_batch_size*j]])
+                elif self.lm_type == 'gpt2':
+                    lr_input.append(lm_outputs[i+real_batch_size*j]["hidden_states"][-1][0][target_indexes[i+real_batch_size*j]])
+                    
             lr_input = torch.cat(lr_input, dim=0)
 
             lr_inputs_batch.append(lr_input)
