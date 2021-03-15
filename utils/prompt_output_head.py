@@ -1,6 +1,5 @@
 import torch
 
-
 class SinglePromptLogitSentimentClassificationHead(torch.nn.Module):
     def __init__(self, mlm, num_class, pseudo_label_words, mask_token_id):
         super(SinglePromptLogitSentimentClassificationHead, self).__init__()
@@ -35,8 +34,12 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
 
         self.mlm = mlm
 
-        self.linear = torch.nn.Linear(
-            self.num_prompts * self.mlm.config.hidden_size, self.num_class)
+        self.fc1 = torch.nn.Linear(
+            self.num_prompts * self.mlm.config.hidden_size, 300)
+        
+        self.fc2 = torch.nn.Linear(300, 100)
+            
+        self.fc3 = torch.nn.Linear(100, self.num_class)
 
     def forward(self, reviews_and_prompts):
 
@@ -66,6 +69,8 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
 
         lr_inputs_batch = torch.stack(lr_inputs_batch)
 
-        outputs = self.linear(lr_inputs_batch)
+        outputs = torch.tanh(self.fc1(lr_inputs_batch))
+        outputs = torch.tanh(self.fc2(outputs))
+        outputs = self.fc3(outputs)
 
         return outputs
