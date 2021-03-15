@@ -2,25 +2,50 @@ import torch
 
 
 class SinglePromptLogitSentimentClassificationHead(torch.nn.Module):
-    def __init__(self, mlm, num_class, pseudo_label_words, mask_token_id):
+    def __init__(self, lm, num_class, pseudo_label_words, target_token_id=-1):
         super(SinglePromptLogitSentimentClassificationHead, self).__init__()
 
         self.num_class = num_class
         self.pseudo_label_words = pseudo_label_words
-        self.mask_token_id = mask_token_id
+        self.target_token_id = target_token_id
 
-        self.mlm = mlm
+        self.lm = lm
+        
+        # Is self.lm BERT or GPT-2?
+        if self.lm.config.architectures[0].startswith('Bert'):
+            # if self.lm is BERT, then mask_token_id should be specified
+            assert self.target_token_id != -1
+            self.lm_type = 'bert'
+        elif self.lm.config.architectures[0].startswith('GPT2'):
+            self.lm_type = 'gpt2'
+        else:
+            raise Exception('Unsupported language model type.')
+            
+        print("Detected LM type:", self.lm_type)
 
     def forward(self, reviews_and_prompts):
 
-        mlm_outputs = self.mlm(**reviews_and_prompts)
+        if self.lm_type == 'bert':
+            # Figures out where the mask token was placed
+            target_indexes = (reviews_and_prompts.data["input_ids"] == self.target_token_id)
 
-        # Figures out where the mask token was placed
-        masked_indexes = (reviews_and_prompts.data["input_ids"] == self.mask_token_id)
+            lm_outputs = self.lm(**reviews_and_prompts)
 
-        outputs = mlm_outputs.logits[masked_indexes]
+            outputs = lm_outputs.logits[target_indexes]
         
-        outputs = outputs[:, self.pseudo_label_words]
+            outputs = outputs[:, self.pseudo_label_words]
+            
+        elif self.lm_type == 'gpt2':
+            
+            outputs = []
+            
+            for example in reviews_and_prompts:
+                lm_outputs = self.lm(**example)
+                
+                outputs.append(
+                    lm_outputs.logits[0, len(example['input_ids'][0]) - 1][self.pseudo_label_words])
+
+            outputs = torch.Tensor(outputs)
 
         return outputs
 
@@ -36,9 +61,9 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
         self.lm = lm
         
         # Is self.lm BERT or GPT-2?
-        if self.lm.config.architectures[0].startswith('BERT'):
+        if self.lm.config.architectures[0].startswith('Bert'):
             # if self.lm is BERT, then mask_token_id should be specified
-            assert target_token_id != -1
+            assert self.target_token_id != -1
             self.lm_type = 'bert'
         elif self.lm.config.architectures[0].startswith('GPT2'):
             self.lm_type = 'gpt2'
