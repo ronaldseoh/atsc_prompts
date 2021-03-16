@@ -40,12 +40,13 @@ class SinglePromptLogitSentimentClassificationHead(torch.nn.Module):
             outputs = []
             
             for example in reviews_and_prompts:
-                lm_outputs = self.lm(**example)
+                lm_outputs = self.lm(**example, return_dict=True)
                 
-                outputs.append(
-                    lm_outputs.logits[0, len(example['input_ids'][0]) - 1][self.pseudo_label_words])
+                lm_predictions = lm_outputs.logits[0, len(example['input_ids'][0]) - 1, self.pseudo_label_words]
+                
+                outputs.append(lm_predictions)
 
-            outputs = torch.Tensor(outputs)
+            outputs = torch.stack(outputs, dim=0)
 
         return outputs
 
@@ -128,22 +129,22 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
 
 
 class NoPromptSentimentClassificationHead(torch.nn.Module):
-    def __init__(self, bert, num_class):
+    def __init__(self, lm, num_class):
         super(NoPromptSentimentClassificationHead, self).__init__()
 
         self.num_class = num_class
 
-        self.bert = bert
+        self.lm = lm
 
         self.linear = torch.nn.Linear(
-            self.bert.config.hidden_size, self.num_class)
+            self.lm.config.hidden_size, self.num_class)
 
     def forward(self, reviews_and_prompts):
 
-        bert_outputs = self.bert(**reviews_and_prompts)
+        lm_outputs = self.lm(**reviews_and_prompts, output_hidden_states=True)
 
         # Last hidden state for [CLS] token
-        last_hidden_state_cls = bert_outputs["last_hidden_state"][:, 0, :]
+        last_hidden_state_cls = lm_outputs["hidden_states"][-1][:, 0, :]
         
         outputs = self.linear(last_hidden_state_cls)
 
