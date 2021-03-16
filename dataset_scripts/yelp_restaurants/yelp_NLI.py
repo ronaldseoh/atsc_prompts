@@ -56,7 +56,7 @@ class YelpRestaurants(datasets.GeneratorBasedBuilder):
                     "review_id": datasets.Value("string"),
                     "premise": datasets.Value("string"),
                     "hypothesis": datasets.Value("string"),
-                    "label": datasets.Value("string")
+                    "label": datasets.Value("int64")
                 }
             ),
             # No default supervised_keys (as we have to pass both premise
@@ -142,7 +142,7 @@ class YelpRestaurants(datasets.GeneratorBasedBuilder):
                                 "review_id": review["review_id"],
                                 "premise": premise,
                                 "hypothesis": hypothesis,
-                                "label": "entailment"
+                                "label": 0
                             }
 
                             # Neutral with the premise being the first sentence of the previous review
@@ -151,7 +151,7 @@ class YelpRestaurants(datasets.GeneratorBasedBuilder):
                                     "review_id": review["review_id"],
                                     "premise": prev_sentences[0],
                                     "hypothesis": hypothesis,
-                                    "label": "neutral"
+                                    "label": 1
                                 }
 
                     prev_sentences = sentences
