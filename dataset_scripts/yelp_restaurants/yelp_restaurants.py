@@ -67,7 +67,7 @@ class YelpRestaurants(datasets.GeneratorBasedBuilder):
 
         restaurantIDs = set(line.strip() for line in open(restaurant_ids_path))
 
-        with open(filepath) as f:
+        with open(filepath, encoding="utf-8") as f:
             for line in f:
                 review = json.loads(line)
 

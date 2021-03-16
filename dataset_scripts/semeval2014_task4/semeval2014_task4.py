@@ -71,12 +71,8 @@ class SemEval2014Task4Dataset(datasets.GeneratorBasedBuilder):
             features=datasets.Features(
                 {
                     "text": datasets.Value("string"),
-                    "opinions": datasets.features.Sequence(
-                        {
-                            "aspect": datasets.Value("string"),
-                            "sentiment": datasets.features.ClassLabel(names=["positive", "negative", "neutral", "conflict"])
-                        }
-                    ),
+                    "aspect": datasets.Value("string"),
+                    "sentiment": datasets.features.ClassLabel(names=["positive", "negative", "neutral", "conflict"])
                 }
             ),
             # If there's a common (input, target) tuple from the features,
@@ -106,7 +102,7 @@ class SemEval2014Task4Dataset(datasets.GeneratorBasedBuilder):
         """ Yields examples. """
         # Based on the codes from
         # https://github.com/deepopinion/domain-adapted-atsc/blob/master/utils.py
-        with open(filepath) as semeval_file:
+        with open(filepath, encoding='utf-8') as semeval_file:
             sentence_elements = ET.parse(semeval_file).getroot().iter('sentence')
 
         for id_, s in enumerate(sentence_elements):
@@ -132,7 +128,9 @@ class SemEval2014Task4Dataset(datasets.GeneratorBasedBuilder):
                         aspect_term_sentiment.append((aspect_term, sentiment))
 
             if len(aspect_term_sentiment) > 0:
-                yield id_, {
-                    "text": sentence_text,
-                    "opinions": aspect_term_sentiment,
-                }
+                for ats in aspect_term_sentiment:
+                    yield id_, {
+                        "text": sentence_text,
+                        "aspect": ats["aspect"],
+                        "sentiment": ats["sentiment"]
+                    }
