@@ -4,7 +4,7 @@
 #SBATCH -e gypsum_logs/stderr/lm_finetuning_bert_nli_yelp_restaurants_%j.err
 #SBATCH --ntasks=1
 #SBATCH --partition=1080ti-long
-#SBATCH --gres=gpu:2
+#SBATCH --gres=gpu:4
 #SBATCH --mem=64GB
 #SBATCH --cpus-per-task=8
 
@@ -23,6 +23,6 @@ papermill --autosave-cell-every 1200 --progress-bar --log-output --log-level INF
           -p total_subset_proportion 1.0 \
           -p validation_dataset_proportion 0.1 \
           -p num_train_epochs 20 \
-          -p per_device_train_batch_size 16 \
-          -p per_device_eval_batch_size 16 \
+          -p per_device_train_batch_size 8 \
+          -p per_device_eval_batch_size 8 \
           -p weight_decay 0.01 \
