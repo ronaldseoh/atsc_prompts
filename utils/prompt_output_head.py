@@ -1,13 +1,14 @@
 import torch
 
 
-class SinglePromptLogitSentimentClassificationHead(torch.nn.Module):
-    def __init__(self, lm, num_class, pseudo_label_words, target_token_id=-1):
-        super(SinglePromptLogitSentimentClassificationHead, self).__init__()
+class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
+    def __init__(self, lm, num_class, num_prompts, pseudo_label_words, target_token_id=-1):
+        super(MultiPromptLogitSentimentClassificationHead, self).__init__()
 
         self.num_class = num_class
         self.pseudo_label_words = pseudo_label_words
         self.target_token_id = target_token_id
+        self.num_prompts = num_prompts
 
         self.lm = lm
         
@@ -25,30 +26,71 @@ class SinglePromptLogitSentimentClassificationHead(torch.nn.Module):
 
     def forward(self, reviews_and_prompts):
 
+        # Figures out where the mask token was placed
         if self.lm_type == 'bert':
-            # Figures out where the mask token was placed
-            target_indexes = (reviews_and_prompts.data["input_ids"] == self.target_token_id)
+            # For BERT, we need to find the token in each input with [MASK]
+            target_indexes = torch.nonzero(
+                reviews_and_prompts.data["input_ids"] == self.target_token_id)[:, 1]
 
             lm_outputs = self.lm(**reviews_and_prompts)
 
-            outputs = lm_outputs.logits[target_indexes]
-        
-            outputs = outputs[:, self.pseudo_label_words]
-            
+            real_batch_size = len(reviews_and_prompts.data["input_ids"]) // self.num_prompts
+
         elif self.lm_type == 'gpt2':
-            
-            outputs = []
-            
+            lm_outputs = []
+            target_indexes = []
+
+            # For GPT-2, we need to find the spot right after the input text
             for example in reviews_and_prompts:
-                lm_outputs = self.lm(**example, return_dict=True)
-                
-                lm_predictions = lm_outputs.logits[0, len(example['input_ids'][0]) - 1, self.pseudo_label_words]
-                
-                outputs.append(lm_predictions)
+                target_indexes.append(len(example['input_ids'][0]) - 1)
 
-            outputs = torch.stack(outputs, dim=0)
+                lm_outputs.append(self.lm(**example))
 
+            real_batch_size = len(reviews_and_prompts) // self.num_prompts
+
+        outputs = []
+                
+        for i in range(real_batch_size):
+            scores_batch = []
+
+            for j in range(self.num_prompts):
+                if self.lm_type == 'bert':
+                    # Softmax the logit output
+                    softmax = torch.nn.functional.softmax(
+                        lm_outputs.logits[i+real_batch_size*j, target_indexes[i+real_batch_size*j], self.pseudo_label_words[j]],
+                        dim=-1)
+                    
+                    # Normalize each row vector
+                    softmax_normalized = torch.nn.functional.normalize(softmax, p=1, dim=-1)
+                    
+                elif self.lm_type == 'gpt2':
+                    # Softmax the logit output
+                    softmax = torch.nn.functional.softmax(
+                        lm_outputs[i+real_batch_size*j].logits[0, target_indexes[i+real_batch_size*j], self.pseudo_label_words[j]],
+                        dim=-1)
+
+                    # Normalize each row vector
+                    softmax_normalized = torch.nn.functional.normalize(softmax, p=1, dim=-1)                        
+
+                scores_batch.append(softmax_normalized)
+                
+            scores_batch = torch.stack(scores_batch, dim=0)
+                
+            # Sum up the scores across rows
+            scores_batch_sum = torch.sum(scores_batch, dim=0)
+            
+            outputs.append(scores_batch_sum)
+
+        outputs = torch.stack(outputs, dim=0)
+            
         return outputs
+
+        
+        
+class SinglePromptLogitSentimentClassificationHead(MultiPromptLogitSentimentClassificationHead):
+    def __init__(self, lm, num_class, pseudo_label_words, target_token_id=-1):
+        
+        super().__init__(lm, num_class, 1, [pseudo_label_words], target_token_id)
 
 
 class MultiPromptSentimentClassificationHead(torch.nn.Module):
