@@ -60,26 +60,22 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
                         lm_outputs.logits[i+real_batch_size*j, target_indexes[i+real_batch_size*j], self.pseudo_label_words[j]],
                         dim=-1)
                     
-                    # Normalize each row vector
-                    softmax_normalized = torch.nn.functional.normalize(softmax, p=1, dim=-1)
-                    
                 elif self.lm_type == 'gpt2':
                     # Softmax the logit output
                     softmax = torch.nn.functional.softmax(
                         lm_outputs[i+real_batch_size*j].logits[0, target_indexes[i+real_batch_size*j], self.pseudo_label_words[j]],
                         dim=-1)
 
-                    # Normalize each row vector
-                    softmax_normalized = torch.nn.functional.normalize(softmax, p=1, dim=-1)                        
+                # Normalize each row vector
+                softmax = torch.nn.functional.normalize(softmax, p=1, dim=-1)                        
 
-                scores_batch.append(softmax_normalized)
-                
-            scores_batch = torch.stack(scores_batch, dim=0)
+                scores_batch.append(softmax)
                 
             # Sum up the scores across rows
-            scores_batch_sum = torch.sum(scores_batch, dim=0)
+            scores_batch = torch.stack(scores_batch, dim=0)
+            scores_batch = torch.sum(scores_batch, dim=0)
             
-            outputs.append(scores_batch_sum)
+            outputs.append(scores_batch)
 
         outputs = torch.stack(outputs, dim=0)
             
