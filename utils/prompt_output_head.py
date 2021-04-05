@@ -149,3 +149,39 @@ class NoPromptSentimentClassificationHead(torch.nn.Module):
         outputs = self.linear(last_hidden_state_cls)
 
         return outputs
+    
+class MultiPromptNLISentimentClassificationHead(torch.nn.Module):
+    def __init__(self, nli_model, num_prompts):
+        super(MultiPromptNLISentimentClassificationHead, self).__init__()
+        self.num_prompts = num_prompts
+
+        self.nli_model = nli_model
+        
+        # Linear layer
+        self.linear = torch.nn.Linear(
+            self.num_prompts*3, 3)
+
+    def forward(self, reviews_and_prompts):
+
+        # Extract nli logits and feed them to self.linear
+        outputs = []
+
+        nli_logits = self.nli_model(**reviews_and_prompts)['logits']
+        batch_size = len(nli_logits)//(self.num_prompts)
+              
+        
+        lr_inputs_batch = []
+        
+        for i in range(batch_size):
+            lr_input = []
+            for j in range(i, i+self.num_prompts):
+                lr_input.append(nli_logits[j])
+        
+            lr_input = torch.cat(lr_input, dim=0)
+            lr_inputs_batch.append(lr_input)
+
+        lr_inputs_batch = torch.stack(lr_inputs_batch)
+        
+        outputs = self.linear(lr_inputs_batch)
+
+        return outputs
