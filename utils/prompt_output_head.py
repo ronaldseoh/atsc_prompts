@@ -33,16 +33,21 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
                 reviews_and_prompts.data["input_ids"] == self.target_token_id)[:, 1]
 
             lm_outputs = self.lm(**reviews_and_prompts)
+
             real_batch_size = len(reviews_and_prompts.data["input_ids"]) // self.num_prompts
 
         elif self.lm_type == 'gpt2':
             lm_outputs = []
             target_indexes = []
+
+            # For GPT-2, we need to find the spot right after the input text
+            # for example in reviews_and_prompts:
+            #     target_indexes.append(len(example['input_ids'][0]) - 1)
             n = reviews_and_prompts.data["input_ids"].shape[0]
             t = torch.tensor([reviews_and_prompts.data["input_ids"].shape[1]-1])
             target_indexes = torch.cat(n*[t])
             lm_outputs = self.lm(**reviews_and_prompts)
-            real_batch_size = len(reviews_and_prompts.data["input_ids"])  // self.num_prompts
+            real_batch_size = len(reviews_and_prompts.data["input_ids"]) // self.num_prompts
 
         outputs = []
                 
@@ -54,17 +59,16 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
                 softmax = torch.nn.functional.softmax(
                     lm_outputs.logits[i+real_batch_size*j, target_indexes[i+real_batch_size*j], self.pseudo_label_words[j]],
                     dim=-1)
-                
                 # Normalize each row vector
-                softmax_normalized = torch.nn.functional.normalize(softmax, p=1, dim=-1)
-                scores_batch.append(softmax_normalized)
-                
-            scores_batch = torch.stack(scores_batch, dim=0)
+                softmax = torch.nn.functional.normalize(softmax, p=1, dim=-1)                        
+
+                scores_batch.append(softmax)
                 
             # Sum up the scores across rows
-            scores_batch_sum = torch.sum(scores_batch, dim=0)
+            scores_batch = torch.stack(scores_batch, dim=0)
+            scores_batch = torch.sum(scores_batch, dim=0)
             
-            outputs.append(scores_batch_sum)
+            outputs.append(scores_batch)
 
         outputs = torch.stack(outputs, dim=0)
             
@@ -124,11 +128,15 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
         elif self.lm_type == 'gpt2':
             lm_outputs = []
             target_indexes = []
+
+            # For GPT-2, we need to find the spot right after the input text
+            # for example in reviews_and_prompts:
+            #     target_indexes.append(len(example['input_ids'][0]) - 1)
             n = reviews_and_prompts.data["input_ids"].shape[0]
             t = torch.tensor([reviews_and_prompts.data["input_ids"].shape[1]-1])
             target_indexes = torch.cat(n*[t])
             lm_outputs = self.lm(**reviews_and_prompts)
-            real_batch_size = len(reviews_and_prompts.data["input_ids"])  // self.num_prompts
+            real_batch_size = len(reviews_and_prompts.data["input_ids"]) // self.num_prompts
                 
         for i in range(real_batch_size):
             # Create an input to self.linear by
@@ -136,10 +144,10 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
             lr_input = []
 
             for j in range(self.num_prompts):
-                if self.lm_type == 'bert':
-                    lr_input.append(lm_outputs["hidden_states"][-1][i+real_batch_size*j][target_indexes[i+real_batch_size*j]])
-                elif self.lm_type == 'gpt2':
-                    lr_input.append(lm_outputs[i+real_batch_size*j]["hidden_states"][-1][0][target_indexes[i+real_batch_size*j]])
+                #if self.lm_type == 'bert':
+                lr_input.append(lm_outputs["hidden_states"][-1][i+real_batch_size*j][target_indexes[i+real_batch_size*j]])
+                # elif self.lm_type == 'gpt2':
+                #     lr_input.append(lm_outputs[i+real_batch_size*j]["hidden_states"][-1][0][target_indexes[i+real_batch_size*j]])
                     
             lr_input = torch.cat(lr_input, dim=0)
 
