@@ -150,38 +150,34 @@ class NoPromptSentimentClassificationHead(torch.nn.Module):
 
         return outputs
     
-class MultiPromptNLISentimentClassificationHead(torch.nn.Module):
-    def __init__(self, nli_model, num_prompts):
-        super(MultiPromptNLISentimentClassificationHead, self).__init__()
+class NLISentimentClassificationHead(torch.nn.Module):
+    def __init__(self, nli_model, num_prompts, pos_indexes, neg_indexes):
+        super(NLISentimentClassificationHead, self).__init__()
+        
         self.num_prompts = num_prompts
-
         self.nli_model = nli_model
         
-        # Linear layer
-        self.linear = torch.nn.Linear(
-            self.num_prompts*3, 3)
-
+        self.pos_indexes = pos_indexes
+        self.neg_indexes = neg_indexes
+        
     def forward(self, reviews_and_prompts):
 
-        # Extract nli logits and feed them to self.linear
-        outputs = []
+        outputs = torch.Tensor()
 
-        nli_logits = self.nli_model(**reviews_and_prompts)['logits']
-        batch_size = len(nli_logits)//(self.num_prompts)
-              
-        
-        lr_inputs_batch = []
-        
-        for i in range(batch_size):
-            lr_input = []
-            for j in range(i, i+self.num_prompts):
-                lr_input.append(nli_logits[j])
-        
-            lr_input = torch.cat(lr_input, dim=0)
-            lr_inputs_batch.append(lr_input)
+        # Text Attack NLI Labels: 0-> Contradiction, 1-> Entailment, 2-> Neutral
+        # Sentiment Polarity Labels: 0-> Positive, 1-> Negative, 2-> Neutral
+        for i in range(len(batch_val["text"])):
+            prompts_batch = nli_output[i*len(sentiment_prompts):(i+1)*len(sentiment_prompts)]
 
-        lr_inputs_batch = torch.stack(lr_inputs_batch)
-        
-        outputs = self.linear(lr_inputs_batch)
+            pos_logit = torch.mean(prompts_batch[pos_prompt_indexes], dim=0)[1]
+
+            neg_logit = torch.mean(prompts_batch[neg_prompt_indexes], dim=0)[1]
+
+            neu_logit = torch.min(prompts_batch, dim=0)[0][2]
+
+            pred_logits = torch.stack([pos_logit, neg_logit, neu_logit])
+            pred_logits = torch.reshape(pred_logits, (1,-1))
+
+            outputs = torch.cat([outputs, pred_logits])
 
         return outputs
