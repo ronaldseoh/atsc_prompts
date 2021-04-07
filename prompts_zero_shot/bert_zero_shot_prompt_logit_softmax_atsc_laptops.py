@@ -28,17 +28,17 @@ sentiment_prompts = {
 
 # Test settings
 testing_batch_size = 32
-testing_domains = ['laptops']
+testing_domain = 'laptops'
 
-# Results file
-results_path = 'results_laptops'
+# Results directory path
+results_path = 'results_' + experiment_id_prefix + '_' + testing_domain
 os.makedirs(results_path, exist_ok=True)
 
 # Run single prompt experiments first
 print("Running zero-shot single prompts...")
 print()
 
-for seed, testing_domain, lm_model_name, prompt_key in tqdm.tqdm(itertools.product(random_seeds, testing_domains, lm_model_paths.keys(), sentiment_prompts.keys())):
+for seed, lm_model_name, prompt_key in tqdm.tqdm(itertools.product(random_seeds, lm_model_paths.keys(), sentiment_prompts.keys())):
     
     # We will use the following string ID to identify this particular (training) experiments
     # in directory paths and other settings
@@ -66,6 +66,7 @@ for seed, testing_domain, lm_model_name, prompt_key in tqdm.tqdm(itertools.produ
        os.path.join(results_path, experiment_id + '.ipynb'),
        parameters=parameters_to_inject,
        log_output=True,
+       progress_bar=True,
        autosave_cell_every=300  
     )
 
@@ -73,7 +74,7 @@ for seed, testing_domain, lm_model_name, prompt_key in tqdm.tqdm(itertools.produ
 print("Running zero-shot multiple prompts...")
 print()
 
-for seed, testing_domain, lm_model_name in tqdm.tqdm(itertools.product(random_seeds, testing_domains, lm_model_paths.keys())):
+for seed, lm_model_name in tqdm.tqdm(itertools.product(random_seeds, lm_model_paths.keys())):
     
     # We will use the following string ID to identify this particular (training) experiments
     # in directory paths and other settings
@@ -100,5 +101,6 @@ for seed, testing_domain, lm_model_name in tqdm.tqdm(itertools.product(random_se
        os.path.join(results_path, experiment_id + '.ipynb'),
        parameters=parameters_to_inject,
        log_output=True,
+       progress_bar=True,
        autosave_cell_every=300  
     )
