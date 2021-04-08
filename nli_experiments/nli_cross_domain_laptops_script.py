@@ -42,7 +42,7 @@ train_batch_sizes = {
 }
 # Training settings
 training_domain = 'restaurants' # 'laptops', 'restaurants', 'joint'
-testing_domain = 'restaurants'
+testing_domain = 'laptops'
 
 # Test settings
 testing_batch_size = 32

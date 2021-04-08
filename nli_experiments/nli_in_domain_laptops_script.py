@@ -41,8 +41,8 @@ train_batch_sizes = {
     'multi_prompt': 4
 }
 # Training settings
-training_domain = 'restaurants' # 'laptops', 'restaurants', 'joint'
-testing_domain = 'restaurants'
+training_domain = 'laptops' # 'laptops', 'restaurants', 'joint'
+testing_domain = 'laptops'
 
 # Test settings
 testing_batch_size = 32
