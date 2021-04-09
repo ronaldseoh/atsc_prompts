@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=nli_cross_domain_laptops
-#SBATCH -o gypsum_logs/stdout/nli_cross_domain_laptops.txt
-#SBATCH -e gypsum_logs/stderr/nli_cross_domain_laptops.err
+#SBATCH --job-name=nli_in_domain_laptops
+#SBATCH -o gypsum_logs/stdout/nli_in_domain_laptops.txt
+#SBATCH -e gypsum_logs/stderr/nli_in_domain_laptops.err
 #SBATCH --ntasks=1
 #SBATCH --partition=titanx-long
 #SBATCH --gres=gpu:1

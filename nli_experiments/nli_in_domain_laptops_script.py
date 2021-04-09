@@ -20,25 +20,34 @@ nli_model_paths = {
 sentiment_prompts = {
     'the_aspect_is': ["The {aspect} is good.", "The {aspect} is bad."],
     'I_like': ["I like the {aspect}.", "I dislike the {aspect}."],
-    'multi_prompt': ["The {aspect} is good.", "The {aspect} is bad.", "I like the {aspect}.", "I dislike the {aspect}."]
+    'made_me_feel': ["The {aspect} made me feel good.", "The {aspect} made me feel bad."],
+    'I_felt': ["I felt the {aspect} was good.", "I felt the {aspect} was bad."],
+    'multi_prompt': ["The {aspect} is good.", "The {aspect} is bad.", "I like the {aspect}.", "I dislike the {aspect}.",
+                    "The {aspect} made me feel good.", "The {aspect} made me feel bad.", "I felt the {aspect} was good.", "I felt the {aspect} was bad."]
 }
 
 pos_prompt_indexes = {
     'the_aspect_is': [0],
     'I_like': [0],
-    'multi_prompt': [0, 2]
+    'made_me_feel': [0],
+    'I_felt': [0],
+    'multi_prompt': [0, 2, 4, 6]
 }
 
 neg_prompt_indexes = {
     'the_aspect_is': [1],
     'I_like': [1],
-    'multi_prompt': [1, 3]
+    'made_me_feel': [1],
+    'I_felt': [1],
+    'multi_prompt': [1, 3, 5, 7]
 }
 
 train_batch_sizes = {
     'the_aspect_is': 8,
     'I_like': 8,
-    'multi_prompt': 4
+    "made_me_feel": 8,
+    "I_felt": 8,
+    'multi_prompt': 2
 }
 # Training settings
 training_domain = 'laptops' # 'laptops', 'restaurants', 'joint'
