@@ -27,7 +27,7 @@ sentiment_prompts = {
 }
 
 run_single_prompt = True
-run_multiple_prompts = False
+run_multiple_prompts = True
 
 # Training settings
 training_domain = 'laptops' # 'laptops', 'restaurants', 'joint'
