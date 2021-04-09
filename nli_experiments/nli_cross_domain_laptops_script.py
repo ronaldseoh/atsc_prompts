@@ -6,7 +6,7 @@ import tqdm
 
 
 # experiment id prefix
-experiment_id_prefix = 'nli_supervised_in_domain'
+experiment_id_prefix = 'nli_supervised_cross_domain'
 
 # Random seed
 random_seeds = [696]
