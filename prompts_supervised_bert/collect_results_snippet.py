@@ -20,7 +20,7 @@ lm_model_paths = {
 }
 
 # Training settings
-training_domain = 'laptops' # 'laptops', 'restaurants', 'joint'
+training_domain = 'restaurants' # 'laptops', 'restaurants', 'joint'
 
 # Test settings
 testing_batch_size = 32

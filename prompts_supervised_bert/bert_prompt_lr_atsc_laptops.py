@@ -9,7 +9,7 @@ import tqdm
 experiment_id_prefix = 'bert_prompt_lr_atsc'
 
 # Random seed
-random_seeds = [696]
+random_seeds = [696, 685, 683, 682, 589]
 
 # path to pretrained MLM model folder or the string "bert-base-uncased"
 lm_model_paths = {
