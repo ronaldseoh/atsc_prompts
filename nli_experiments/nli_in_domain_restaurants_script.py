@@ -90,7 +90,7 @@ for seed, nli_model_name, prompt_key in tqdm.tqdm(itertools.product(random_seeds
         'training_domain': training_domain,
         'testing_batch_size': testing_batch_size,
         'testing_domain': testing_domain,
-        'train_batch_size': train_batch_sizes[prompt_key]
+        'training_batch_size': train_batch_sizes[prompt_key]
     }
 
     papermill.execute_notebook(

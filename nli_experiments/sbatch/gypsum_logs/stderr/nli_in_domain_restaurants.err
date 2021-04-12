@@ -1,0 +1,246 @@
+0it [00:00, ?it/s]
+Executing:   0%|          | 0/36 [00:00<?, ?cell/s][A
+Executing:   3%|▎         | 1/36 [00:02<01:13,  2.11s/cell][A
+Executing:   6%|▌         | 2/36 [00:02<00:51,  1.53s/cell][A
+Executing:   8%|▊         | 3/36 [00:02<00:36,  1.12s/cell][A
+Executing:  11%|█         | 4/36 [00:02<00:27,  1.16cell/s][A
+Executing:  14%|█▍        | 5/36 [00:02<00:20,  1.51cell/s][A
+Executing:  17%|█▋        | 6/36 [00:03<00:15,  1.90cell/s][A
+Executing:  19%|█▉        | 7/36 [00:03<00:11,  2.43cell/s][A[W Context.cpp:69] Warning: torch.set_deterministic is in beta, and its design and  functionality may change in the future. (function operator())
+
+Executing:  22%|██▏       | 8/36 [00:06<00:38,  1.38s/cell][A
+Executing:  25%|██▌       | 9/36 [00:07<00:27,  1.01s/cell][A
+Executing:  28%|██▊       | 10/36 [00:07<00:20,  1.28cell/s][A
+Executing:  31%|███       | 11/36 [00:07<00:14,  1.70cell/s][A
+Executing:  33%|███▎      | 12/36 [00:07<00:10,  2.19cell/s][AUsing custom data configuration default
+
+Reusing dataset sem_eval2014_task4_dataset (../dataset_cache/sem_eval2014_task4_dataset/default-c1bed44099ac1808/0.0.1/f33ba7108331ad17be3f9fb710ca001edb383fba797c6ed0938354e6812ca969)
+
+Using custom data configuration default
+
+Reusing dataset sem_eval2014_task4_dataset (../dataset_cache/sem_eval2014_task4_dataset/default-f64bbd4736fb4267/0.0.1/f33ba7108331ad17be3f9fb710ca001edb383fba797c6ed0938354e6812ca969)
+
+
+Executing:  36%|███▌      | 13/36 [00:07<00:09,  2.50cell/s][A
+Executing:  39%|███▉      | 14/36 [00:07<00:07,  3.05cell/s][A
+Executing:  42%|████▏     | 15/36 [00:08<00:05,  3.61cell/s][A
+Executing:  44%|████▍     | 16/36 [00:08<00:04,  4.19cell/s][A
+Executing:  47%|████▋     | 17/36 [00:08<00:04,  4.65cell/s][ALoading cached shuffled indices for dataset at ../dataset_cache/sem_eval2014_task4_dataset/default-f64bbd4736fb4267/0.0.1/f33ba7108331ad17be3f9fb710ca001edb383fba797c6ed0938354e6812ca969/cache-018db51f6b614634.arrow
+
+
+Executing:  50%|█████     | 18/36 [00:08<00:04,  4.43cell/s][A
+Executing:  53%|█████▎    | 19/36 [00:08<00:03,  4.65cell/s][A
+Executing:  56%|█████▌    | 20/36 [00:09<00:03,  5.10cell/s][A
+Executing:  58%|█████▊    | 21/36 [00:09<00:02,  5.49cell/s][A
+Executing:  61%|██████    | 22/36 [00:14<00:22,  1.62s/cell][A
+Executing:  64%|██████▍   | 23/36 [00:14<00:15,  1.18s/cell][A
+Executing:  67%|██████▋   | 24/36 [00:16<00:18,  1.58s/cell][A
+Executing:  69%|██████▉   | 25/36 [00:16<00:12,  1.15s/cell][A
+Executing:  72%|███████▏  | 26/36 [00:17<00:08,  1.17cell/s][A
+Executing:  75%|███████▌  | 27/36 [00:17<00:06,  1.47cell/s][A
+Executing:  78%|███████▊  | 28/36 [00:17<00:04,  1.90cell/s][A
+Executing:  81%|████████  | 29/36 [00:17<00:02,  2.41cell/s][A
+Executing:  83%|████████▎ | 30/36 [1:43:39<3:06:05, 1860.84s/cell][A
+Executing:  86%|████████▌ | 31/36 [1:43:39<1:48:33, 1302.65s/cell][A
+Executing:  89%|████████▉ | 32/36 [1:43:39<1:00:47, 911.92s/cell] [A
+Executing:  92%|█████████▏| 33/36 [1:44:42<32:51, 657.21s/cell]  [A
+Executing:  94%|█████████▍| 34/36 [1:44:43<15:20, 460.11s/cell][A
+Executing:  97%|█████████▋| 35/36 [1:44:43<05:22, 322.22s/cell][A
+Executing: 100%|██████████| 36/36 [1:44:43<00:00, 225.61s/cell][AExecuting: 100%|██████████| 36/36 [1:44:44<00:00, 174.57s/cell]
+1it [1:44:45, 6285.34s/it]
+Executing:   0%|          | 0/36 [00:00<?, ?cell/s][A
+Executing:   3%|▎         | 1/36 [00:01<00:58,  1.66s/cell][A
+Executing:   6%|▌         | 2/36 [00:01<00:41,  1.21s/cell][A
+Executing:   8%|▊         | 3/36 [00:01<00:29,  1.12cell/s][A
+Executing:  11%|█         | 4/36 [00:02<00:21,  1.46cell/s][A
+Executing:  14%|█▍        | 5/36 [00:02<00:19,  1.59cell/s][A
+Executing:  17%|█▋        | 6/36 [00:02<00:14,  2.06cell/s][A
+Executing:  19%|█▉        | 7/36 [00:02<00:11,  2.59cell/s][A[W Context.cpp:69] Warning: torch.set_deterministic is in beta, and its design and  functionality may change in the future. (function operator())
+
+Executing:  22%|██▏       | 8/36 [00:06<00:39,  1.40s/cell][A
+Executing:  25%|██▌       | 9/36 [00:06<00:27,  1.03s/cell][A
+Executing:  28%|██▊       | 10/36 [00:07<00:20,  1.25cell/s][A
+Executing:  31%|███       | 11/36 [00:07<00:15,  1.66cell/s][A
+Executing:  33%|███▎      | 12/36 [00:07<00:11,  2.06cell/s][AUsing custom data configuration default
+
+Reusing dataset sem_eval2014_task4_dataset (../dataset_cache/sem_eval2014_task4_dataset/default-c1bed44099ac1808/0.0.1/f33ba7108331ad17be3f9fb710ca001edb383fba797c6ed0938354e6812ca969)
+
+Using custom data configuration default
+
+Reusing dataset sem_eval2014_task4_dataset (../dataset_cache/sem_eval2014_task4_dataset/default-f64bbd4736fb4267/0.0.1/f33ba7108331ad17be3f9fb710ca001edb383fba797c6ed0938354e6812ca969)
+
+
+Executing:  36%|███▌      | 13/36 [00:08<00:11,  1.92cell/s][A
+Executing:  39%|███▉      | 14/36 [00:08<00:09,  2.38cell/s][A
+Executing:  42%|████▏     | 15/36 [00:08<00:07,  2.93cell/s][A
+Executing:  44%|████▍     | 16/36 [00:08<00:05,  3.54cell/s][A
+Executing:  47%|████▋     | 17/36 [00:08<00:04,  4.07cell/s][ALoading cached shuffled indices for dataset at ../dataset_cache/sem_eval2014_task4_dataset/default-f64bbd4736fb4267/0.0.1/f33ba7108331ad17be3f9fb710ca001edb383fba797c6ed0938354e6812ca969/cache-018db51f6b614634.arrow
+
+
+Executing:  50%|█████     | 18/36 [00:09<00:04,  4.15cell/s][A
+Executing:  53%|█████▎    | 19/36 [00:09<00:03,  4.61cell/s][A
+Executing:  56%|█████▌    | 20/36 [00:09<00:03,  5.00cell/s][A
+Executing:  58%|█████▊    | 21/36 [00:09<00:02,  5.41cell/s][A
+Executing:  61%|██████    | 22/36 [00:14<00:24,  1.78s/cell][A
+Executing:  64%|██████▍   | 23/36 [00:15<00:16,  1.30s/cell][A
+Executing:  67%|██████▋   | 24/36 [00:17<00:19,  1.66s/cell][A
+Executing:  69%|██████▉   | 25/36 [00:17<00:13,  1.21s/cell][A
+Executing:  72%|███████▏  | 26/36 [00:17<00:08,  1.11cell/s][A
+Executing:  75%|███████▌  | 27/36 [00:18<00:07,  1.28cell/s][A
+Executing:  78%|███████▊  | 28/36 [00:18<00:04,  1.68cell/s][A
+Executing:  81%|████████  | 29/36 [00:18<00:03,  2.16cell/s][A
+Executing:  83%|████████▎ | 30/36 [1:43:28<3:05:43, 1857.21s/cell][A
+Executing:  86%|████████▌ | 31/36 [1:43:28<1:48:20, 1300.12s/cell][A
+Executing:  89%|████████▉ | 32/36 [1:43:28<1:00:40, 910.15s/cell] [A
+Executing:  92%|█████████▏| 33/36 [1:44:33<32:49, 656.38s/cell]  [A
+Executing:  94%|█████████▍| 34/36 [1:44:33<15:19, 459.54s/cell][A
+Executing:  97%|█████████▋| 35/36 [1:44:34<05:21, 321.88s/cell][A
+Executing: 100%|██████████| 36/36 [1:44:34<00:00, 225.39s/cell][AExecuting: 100%|██████████| 36/36 [1:44:35<00:00, 174.31s/cell]
+2it [3:29:21, 6282.49s/it]
+Executing:   0%|          | 0/36 [00:00<?, ?cell/s][A
+Executing:   3%|▎         | 1/36 [00:01<01:03,  1.82s/cell][A
+Executing:   6%|▌         | 2/36 [00:01<00:44,  1.31s/cell][A
+Executing:   8%|▊         | 3/36 [00:02<00:31,  1.03cell/s][A
+Executing:  11%|█         | 4/36 [00:02<00:23,  1.39cell/s][A
+Executing:  14%|█▍        | 5/36 [00:02<00:17,  1.81cell/s][A
+Executing:  17%|█▋        | 6/36 [00:02<00:12,  2.32cell/s][A
+Executing:  19%|█▉        | 7/36 [00:02<00:09,  2.92cell/s][A[W Context.cpp:69] Warning: torch.set_deterministic is in beta, and its design and  functionality may change in the future. (function operator())
+
+Executing:  22%|██▏       | 8/36 [00:06<00:35,  1.26s/cell][A
+Executing:  25%|██▌       | 9/36 [00:06<00:25,  1.07cell/s][A
+Executing:  28%|██▊       | 10/36 [00:06<00:19,  1.35cell/s][A
+Executing:  31%|███       | 11/36 [00:06<00:14,  1.78cell/s][A
+Executing:  33%|███▎      | 12/36 [00:06<00:10,  2.31cell/s][AUsing custom data configuration default
+
+Reusing dataset sem_eval2014_task4_dataset (../dataset_cache/sem_eval2014_task4_dataset/default-c1bed44099ac1808/0.0.1/f33ba7108331ad17be3f9fb710ca001edb383fba797c6ed0938354e6812ca969)
+
+Using custom data configuration default
+
+Reusing dataset sem_eval2014_task4_dataset (../dataset_cache/sem_eval2014_task4_dataset/default-f64bbd4736fb4267/0.0.1/f33ba7108331ad17be3f9fb710ca001edb383fba797c6ed0938354e6812ca969)
+
+
+Executing:  36%|███▌      | 13/36 [00:07<00:08,  2.80cell/s][A
+Executing:  39%|███▉      | 14/36 [00:07<00:06,  3.49cell/s][A
+Executing:  42%|████▏     | 15/36 [00:07<00:04,  4.22cell/s][A
+Executing:  44%|████▍     | 16/36 [00:07<00:03,  5.02cell/s][A
+Executing:  47%|████▋     | 17/36 [00:07<00:03,  5.61cell/s][ALoading cached shuffled indices for dataset at ../dataset_cache/sem_eval2014_task4_dataset/default-f64bbd4736fb4267/0.0.1/f33ba7108331ad17be3f9fb710ca001edb383fba797c6ed0938354e6812ca969/cache-018db51f6b614634.arrow
+
+
+Executing:  50%|█████     | 18/36 [00:07<00:03,  5.12cell/s][A
+Executing:  53%|█████▎    | 19/36 [00:07<00:03,  5.63cell/s][A
+Executing:  56%|█████▌    | 20/36 [00:08<00:02,  6.28cell/s][A
+Executing:  58%|█████▊    | 21/36 [00:08<00:02,  6.84cell/s][A
+Executing:  61%|██████    | 22/36 [00:13<00:23,  1.68s/cell][A
+Executing:  64%|██████▍   | 23/36 [00:13<00:15,  1.22s/cell][A
+Executing:  67%|██████▋   | 24/36 [00:15<00:18,  1.55s/cell][A
+Executing:  69%|██████▉   | 25/36 [00:16<00:12,  1.14s/cell][A
+Executing:  72%|███████▏  | 26/36 [00:16<00:08,  1.18cell/s][A
+Executing:  75%|███████▌  | 27/36 [00:16<00:05,  1.54cell/s][A
+Executing:  78%|███████▊  | 28/36 [00:16<00:04,  1.98cell/s][A
+Executing:  81%|████████  | 29/36 [00:16<00:02,  2.51cell/s][A
+Executing:  83%|████████▎ | 30/36 [1:43:20<3:05:32, 1855.40s/cell][A
+Executing:  86%|████████▌ | 31/36 [1:43:20<1:48:14, 1298.85s/cell][A
+Executing:  89%|████████▉ | 32/36 [1:43:20<1:00:37, 909.26s/cell] [A
+Executing:  92%|█████████▏| 33/36 [1:44:24<32:46, 655.65s/cell]  [A
+Executing:  94%|█████████▍| 34/36 [1:44:24<15:18, 459.02s/cell][A
+Executing:  97%|█████████▋| 35/36 [1:44:25<05:21, 321.48s/cell][A
+Executing: 100%|██████████| 36/36 [1:44:25<00:00, 225.10s/cell][AExecuting: 100%|██████████| 36/36 [1:44:27<00:00, 174.10s/cell]
+3it [5:13:49, 6278.12s/it]
+Executing:   0%|          | 0/36 [00:00<?, ?cell/s][A
+Executing:   3%|▎         | 1/36 [00:01<00:48,  1.40s/cell][A
+Executing:   6%|▌         | 2/36 [00:01<00:34,  1.02s/cell][A
+Executing:   8%|▊         | 3/36 [00:01<00:25,  1.31cell/s][A
+Executing:  11%|█         | 4/36 [00:01<00:18,  1.73cell/s][A
+Executing:  14%|█▍        | 5/36 [00:02<00:16,  1.90cell/s][A
+Executing:  17%|█▋        | 6/36 [00:02<00:13,  2.30cell/s][A
+Executing:  19%|█▉        | 7/36 [00:02<00:10,  2.88cell/s][A[W Context.cpp:69] Warning: torch.set_deterministic is in beta, and its design and  functionality may change in the future. (function operator())
+
+Executing:  22%|██▏       | 8/36 [00:05<00:34,  1.25s/cell][A
+Executing:  25%|██▌       | 9/36 [00:06<00:24,  1.10cell/s][A
+Executing:  28%|██▊       | 10/36 [00:06<00:18,  1.42cell/s][A
+Executing:  31%|███       | 11/36 [00:06<00:13,  1.88cell/s][A
+Executing:  33%|███▎      | 12/36 [00:06<00:09,  2.47cell/s][AUsing custom data configuration default
+
+Reusing dataset sem_eval2014_task4_dataset (../dataset_cache/sem_eval2014_task4_dataset/default-c1bed44099ac1808/0.0.1/f33ba7108331ad17be3f9fb710ca001edb383fba797c6ed0938354e6812ca969)
+
+Using custom data configuration default
+
+Reusing dataset sem_eval2014_task4_dataset (../dataset_cache/sem_eval2014_task4_dataset/default-f64bbd4736fb4267/0.0.1/f33ba7108331ad17be3f9fb710ca001edb383fba797c6ed0938354e6812ca969)
+
+
+Executing:  36%|███▌      | 13/36 [00:07<00:10,  2.19cell/s][A
+Executing:  39%|███▉      | 14/36 [00:07<00:08,  2.73cell/s][A
+Executing:  42%|████▏     | 15/36 [00:07<00:06,  3.31cell/s][A
+Executing:  44%|████▍     | 16/36 [00:07<00:05,  3.92cell/s][A
+Executing:  47%|████▋     | 17/36 [00:07<00:04,  4.42cell/s][ALoading cached shuffled indices for dataset at ../dataset_cache/sem_eval2014_task4_dataset/default-f64bbd4736fb4267/0.0.1/f33ba7108331ad17be3f9fb710ca001edb383fba797c6ed0938354e6812ca969/cache-018db51f6b614634.arrow
+
+
+Executing:  50%|█████     | 18/36 [00:07<00:03,  4.50cell/s][A
+Executing:  53%|█████▎    | 19/36 [00:08<00:04,  3.75cell/s][A
+Executing:  56%|█████▌    | 20/36 [00:08<00:04,  3.77cell/s][A
+Executing:  58%|█████▊    | 21/36 [00:08<00:03,  4.33cell/s][A
+Executing:  61%|██████    | 22/36 [00:13<00:24,  1.73s/cell][A
+Executing:  64%|██████▍   | 23/36 [00:14<00:16,  1.27s/cell][A
+Executing:  67%|██████▋   | 24/36 [00:16<00:19,  1.65s/cell][A
+Executing:  69%|██████▉   | 25/36 [00:16<00:13,  1.20s/cell][A
+Executing:  72%|███████▏  | 26/36 [00:17<00:08,  1.12cell/s][A
+Executing:  75%|███████▌  | 27/36 [00:17<00:06,  1.42cell/s][A
+Executing:  78%|███████▊  | 28/36 [00:17<00:04,  1.84cell/s][A
+Executing:  81%|████████  | 29/36 [00:17<00:02,  2.35cell/s][A
+Executing:  83%|████████▎ | 30/36 [1:43:52<3:06:28, 1864.68s/cell][A
+Executing:  86%|████████▌ | 31/36 [1:43:52<1:48:46, 1305.34s/cell][A
+Executing:  89%|████████▉ | 32/36 [1:43:52<1:00:55, 913.80s/cell] [A
+Executing:  92%|█████████▏| 33/36 [1:44:56<32:56, 658.83s/cell]  [A
+Executing:  94%|█████████▍| 34/36 [1:44:56<15:22, 461.28s/cell][A
+Executing:  97%|█████████▋| 35/36 [1:44:57<05:23, 323.06s/cell][A
+Executing: 100%|██████████| 36/36 [1:44:57<00:00, 226.20s/cell][AExecuting: 100%|██████████| 36/36 [1:44:59<00:00, 174.99s/cell]
+4it [6:58:48, 6284.65s/it]
+Executing:   0%|          | 0/36 [00:00<?, ?cell/s][A
+Executing:   3%|▎         | 1/36 [00:01<00:53,  1.53s/cell][A
+Executing:   6%|▌         | 2/36 [00:01<00:37,  1.12s/cell][A
+Executing:   8%|▊         | 3/36 [00:01<00:27,  1.20cell/s][A
+Executing:  11%|█         | 4/36 [00:02<00:20,  1.55cell/s][A
+Executing:  14%|█▍        | 5/36 [00:02<00:19,  1.57cell/s][A
+Executing:  17%|█▋        | 6/36 [00:02<00:15,  1.99cell/s][A
+Executing:  19%|█▉        | 7/36 [00:03<00:11,  2.53cell/s][A[W Context.cpp:69] Warning: torch.set_deterministic is in beta, and its design and  functionality may change in the future. (function operator())
+
+Executing:  22%|██▏       | 8/36 [00:06<00:37,  1.35s/cell][A
+Executing:  25%|██▌       | 9/36 [00:06<00:26,  1.01cell/s][A
+Executing:  28%|██▊       | 10/36 [00:07<00:20,  1.30cell/s][A
+Executing:  31%|███       | 11/36 [00:07<00:14,  1.71cell/s][A
+Executing:  33%|███▎      | 12/36 [00:07<00:10,  2.22cell/s][AUsing custom data configuration default
+
+Reusing dataset sem_eval2014_task4_dataset (../dataset_cache/sem_eval2014_task4_dataset/default-c1bed44099ac1808/0.0.1/f33ba7108331ad17be3f9fb710ca001edb383fba797c6ed0938354e6812ca969)
+
+Using custom data configuration default
+
+Reusing dataset sem_eval2014_task4_dataset (../dataset_cache/sem_eval2014_task4_dataset/default-f64bbd4736fb4267/0.0.1/f33ba7108331ad17be3f9fb710ca001edb383fba797c6ed0938354e6812ca969)
+
+
+Executing:  36%|███▌      | 13/36 [00:08<00:13,  1.76cell/s][A
+Executing:  39%|███▉      | 14/36 [00:08<00:09,  2.22cell/s][A
+Executing:  42%|████▏     | 15/36 [00:08<00:07,  2.76cell/s][A
+Executing:  44%|████▍     | 16/36 [00:08<00:05,  3.36cell/s][A
+Executing:  47%|████▋     | 17/36 [00:08<00:04,  3.91cell/s][ALoading cached shuffled indices for dataset at ../dataset_cache/sem_eval2014_task4_dataset/default-f64bbd4736fb4267/0.0.1/f33ba7108331ad17be3f9fb710ca001edb383fba797c6ed0938354e6812ca969/cache-018db51f6b614634.arrow
+
+
+Executing:  50%|█████     | 18/36 [00:09<00:04,  4.04cell/s][A
+Executing:  53%|█████▎    | 19/36 [00:09<00:03,  4.51cell/s][A
+Executing:  56%|█████▌    | 20/36 [00:09<00:03,  5.00cell/s][A
+Executing:  58%|█████▊    | 21/36 [00:09<00:02,  5.41cell/s][A
+Executing:  61%|██████    | 22/36 [00:14<00:24,  1.75s/cell][A
+Executing:  64%|██████▍   | 23/36 [00:15<00:16,  1.27s/cell][A
+Executing:  67%|██████▋   | 24/36 [00:17<00:19,  1.61s/cell][A
+Executing:  69%|██████▉   | 25/36 [00:17<00:12,  1.17s/cell][A
+Executing:  72%|███████▏  | 26/36 [00:17<00:08,  1.15cell/s][A
+Executing:  75%|███████▌  | 27/36 [00:18<00:06,  1.33cell/s][A
+Executing:  78%|███████▊  | 28/36 [00:18<00:04,  1.74cell/s][A
+Executing:  81%|████████  | 29/36 [00:18<00:03,  2.23cell/s][A
+Executing:  83%|████████▎ | 30/36 [6:46:42<12:11:32, 7315.45s/cell][A
+Executing:  86%|████████▌ | 31/36 [6:46:42<7:06:44, 5120.88s/cell] [A
+Executing:  89%|████████▉ | 32/36 [6:46:42<3:58:58, 3584.69s/cell][A
+Executing:  92%|█████████▏| 33/36 [6:50:54<2:09:14, 2584.72s/cell][A
+Executing:  94%|█████████▍| 34/36 [6:50:54<1:00:18, 1809.43s/cell][A
+Executing:  97%|█████████▋| 35/36 [6:50:55<21:06, 1266.76s/cell]  [A
+Executing: 100%|██████████| 36/36 [6:50:55<00:00, 886.80s/cell] [AExecuting: 100%|██████████| 36/36 [6:50:57<00:00, 684.92s/cell]
+5it [13:49:46, 11796.64s/it]5it [13:49:46, 9957.39s/it] 

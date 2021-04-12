@@ -42,7 +42,7 @@ neg_prompt_indexes = {
     'multi_prompt': [1, 3, 5, 7]
 }
 
-train_batch_sizes = {
+training_batch_sizes = {
     'the_aspect_is': 8,
     'I_like': 8,
     "made_me_feel": 8,
@@ -90,7 +90,7 @@ for seed, nli_model_name, prompt_key in tqdm.tqdm(itertools.product(random_seeds
         'training_domain': training_domain,
         'testing_batch_size': testing_batch_size,
         'testing_domain': testing_domain,
-        'train_batch_size': train_batch_sizes[prompt_key]
+        'training_batch_size': training_batch_sizes[prompt_key]
     }
 
     papermill.execute_notebook(

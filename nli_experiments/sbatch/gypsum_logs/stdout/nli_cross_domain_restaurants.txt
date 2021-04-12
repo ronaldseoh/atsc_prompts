@@ -1,0 +1,12 @@
+Running experiments...
+
+Running experiment  nli_supervised_cross_domain_restaurants_MNLI-base_the_aspect_is_696
+
+Running experiment  nli_supervised_cross_domain_restaurants_MNLI-base_I_like_696
+
+Running experiment  nli_supervised_cross_domain_restaurants_MNLI-base_made_me_feel_696
+
+Running experiment  nli_supervised_cross_domain_restaurants_MNLI-base_I_felt_696
+
+Running experiment  nli_supervised_cross_domain_restaurants_MNLI-base_multi_prompt_696
+
