@@ -55,14 +55,10 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
             scores_batch = []
 
             for j in range(self.num_prompts):
-                # Softmax the logit output
-                softmax = torch.nn.functional.softmax(
-                    lm_outputs.logits[i+real_batch_size*j, target_indexes[i+real_batch_size*j], self.pseudo_label_words[j]],
-                    dim=-1)
-                # Normalize each row vector
-                softmax = torch.nn.functional.normalize(softmax, p=1, dim=-1)                        
+                # logit output assigned to self.pseudo_label_words
+                logits = lm_outputs.logits[i+real_batch_size*j, target_indexes[i+real_batch_size*j], self.pseudo_label_words[j]]       
 
-                scores_batch.append(softmax)
+                scores_batch.append(logits)
                 
             # Sum up the scores across rows
             scores_batch = torch.stack(scores_batch, dim=0)
