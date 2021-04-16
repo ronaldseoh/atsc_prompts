@@ -2,13 +2,15 @@ import torch
 
 
 class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
-    def __init__(self, lm, num_class, num_prompts, pseudo_label_words, target_token_id=-1):
+    def __init__(self, lm, num_class, num_prompts, pseudo_label_words, target_token_id=-1,
+                 merge_behavior='sum_logits'):
         super(MultiPromptLogitSentimentClassificationHead, self).__init__()
 
         self.num_class = num_class
         self.pseudo_label_words = pseudo_label_words
         self.target_token_id = target_token_id
         self.num_prompts = num_prompts
+        self.merge_behavior = merge_behavior
 
         self.lm = lm
         
@@ -53,10 +55,18 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
             scores_batch = []
 
             for j in range(self.num_prompts):
-                # logit output assigned to self.pseudo_label_words
-                logits = lm_outputs.logits[i+real_batch_size*j, target_indexes[i+real_batch_size*j], self.pseudo_label_words[j]]       
+                if self.merge_behavior == 'sum_logits':
+                    # logit output assigned to self.pseudo_label_words
+                    logits = lm_outputs.logits[i+real_batch_size*j, target_indexes[i+real_batch_size*j], self.pseudo_label_words[j]]
+                    
+                    scores_batch.append(logits)
 
-                scores_batch.append(logits)
+                elif self.merge_behavior == 'sum_probabilities':
+                    probabilities = torch.nn.functional.softmax(lm_outputs.logits, dim=-1)
+                    
+                    probs_pseudo_labels = probabilities[i+real_batch_size*j, target_indexes[i+real_batch_size*j], self.pseudo_label_words[j]]
+                    
+                    scores_batch.append(probs_pseudo_labels)
                 
             # Sum up the scores across rows
             scores_batch = torch.stack(scores_batch, dim=0)
