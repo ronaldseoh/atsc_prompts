@@ -2,13 +2,15 @@ import torch
 
 
 class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
-    def __init__(self, lm, num_class, num_prompts, pseudo_label_words, target_token_id=-1):
+    def __init__(self, lm, num_class, num_prompts, pseudo_label_words, target_token_id=-1,
+                 merge_behavior='sum_logits'):
         super(MultiPromptLogitSentimentClassificationHead, self).__init__()
 
         self.num_class = num_class
         self.pseudo_label_words = pseudo_label_words
         self.target_token_id = target_token_id
         self.num_prompts = num_prompts
+        self.merge_behavior = merge_behavior
 
         self.lm = lm
         
@@ -26,7 +28,7 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
 
     def forward(self, reviews_and_prompts):
 
-        # Figures out where the mask token was placed
+        # Figure out where the mask token was placed
         if self.lm_type == 'bert':
             # For BERT, we need to find the token in each input with [MASK]
             target_indexes = torch.nonzero(
@@ -41,8 +43,6 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
             target_indexes = []
 
             # For GPT-2, we need to find the spot right after the input text
-            # for example in reviews_and_prompts:
-            #     target_indexes.append(len(example['input_ids'][0]) - 1)
             n = reviews_and_prompts.data["input_ids"].shape[0]
             t = torch.tensor([reviews_and_prompts.data["input_ids"].shape[1]-1])
             target_indexes = torch.cat(n*[t])
@@ -55,10 +55,18 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
             scores_batch = []
 
             for j in range(self.num_prompts):
-                # logit output assigned to self.pseudo_label_words
-                logits = lm_outputs.logits[i+real_batch_size*j, target_indexes[i+real_batch_size*j], self.pseudo_label_words[j]]       
+                if self.merge_behavior == 'sum_logits':
+                    # logit output assigned to self.pseudo_label_words
+                    logits = lm_outputs.logits[i+real_batch_size*j, target_indexes[i+real_batch_size*j], self.pseudo_label_words[j]]
+                    
+                    scores_batch.append(logits)
 
-                scores_batch.append(logits)
+                elif self.merge_behavior == 'sum_probabilities':
+                    probabilities = torch.nn.functional.softmax(lm_outputs.logits, dim=-1)
+                    
+                    probs_pseudo_labels = probabilities[i+real_batch_size*j, target_indexes[i+real_batch_size*j], self.pseudo_label_words[j]]
+                    
+                    scores_batch.append(probs_pseudo_labels)
                 
             # Sum up the scores across rows
             scores_batch = torch.stack(scores_batch, dim=0)
@@ -79,12 +87,14 @@ class SinglePromptLogitSentimentClassificationHead(MultiPromptLogitSentimentClas
 
 
 class MultiPromptSentimentClassificationHead(torch.nn.Module):
-    def __init__(self, lm, num_class, num_prompts, target_token_id=-1):
+    def __init__(self, lm, num_class, num_prompts, target_token_id=-1,
+                 merge_behavior='concatenate'):
         super(MultiPromptSentimentClassificationHead, self).__init__()
 
         self.num_class = num_class
         self.num_prompts = num_prompts
         self.target_token_id = target_token_id
+        self.merge_behavior = merge_behavior
 
         self.lm = lm
         
@@ -111,7 +121,7 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
 
         lr_inputs_batch = []
 
-        # Figures out where the mask token was placed
+        # Figure out where the mask token was placed
         if self.lm_type == 'bert':
             # For BERT, we need to find the token in each input with [MASK]
             target_indexes = torch.nonzero(
@@ -126,8 +136,6 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
             target_indexes = []
 
             # For GPT-2, we need to find the spot right after the input text
-            # for example in reviews_and_prompts:
-            #     target_indexes.append(len(example['input_ids'][0]) - 1)
             n = reviews_and_prompts.data["input_ids"].shape[0]
             t = torch.tensor([reviews_and_prompts.data["input_ids"].shape[1]-1])
             target_indexes = torch.cat(n*[t])
@@ -140,12 +148,17 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
             lr_input = []
 
             for j in range(self.num_prompts):
-                #if self.lm_type == 'bert':
                 lr_input.append(lm_outputs["hidden_states"][-1][i+real_batch_size*j][target_indexes[i+real_batch_size*j]])
-                # elif self.lm_type == 'gpt2':
-                #     lr_input.append(lm_outputs[i+real_batch_size*j]["hidden_states"][-1][0][target_indexes[i+real_batch_size*j]])
-                    
-            lr_input = torch.cat(lr_input, dim=0)
+              
+            if self.merge_behavior == 'concatenate':
+                lr_input = torch.cat(lr_input, dim=0)
+            elif self_merge_behavior == 'sum':
+                # Do not perform stack and sum operation on single prompt
+                if self.num_prompts == 1:
+                    lr_input = lr_input[0]
+                else:
+                    lr_input = torch.stack(lr_input, dim=0)
+                    lr_input = torch.sum(lr_input, dim=0)
 
             lr_inputs_batch.append(lr_input)
 
