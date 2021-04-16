@@ -62,10 +62,11 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
                     scores_batch.append(logits)
 
                 elif self.merge_behavior == 'sum_probabilities':
-                    probabilities = torch.nn.functional.softmax(lm_outputs.logits, dim=-1)
-                    
-                    probs_pseudo_labels = probabilities[i+real_batch_size*j, target_indexes[i+real_batch_size*j], self.pseudo_label_words[j]]
-                    
+                    probabilities = torch.nn.functional.softmax(
+                        lm_outputs.logits[i+real_batch_size*j, target_indexes[i+real_batch_size*j]], dim=-1)
+
+                    probs_pseudo_labels = probabilities[self.pseudo_label_words[j]]
+
                     scores_batch.append(probs_pseudo_labels)
                 
             # Sum up the scores across rows
@@ -111,8 +112,12 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
         print("Detected LM type:", self.lm_type)
 
         # Linear layer
-        self.linear = torch.nn.Linear(
-            self.num_prompts * self.lm.config.hidden_size, self.num_class)
+        if self.merge_behavior == 'concatenate':
+            self.linear = torch.nn.Linear(
+                self.num_prompts * self.lm.config.hidden_size, self.num_class)
+        elif self.merge_behavior == 'sum':
+            self.linear = torch.nn.Linear(
+                self.lm.config.hidden_size, self.num_class)
 
     def forward(self, reviews_and_prompts):
 
@@ -152,7 +157,7 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
               
             if self.merge_behavior == 'concatenate':
                 lr_input = torch.cat(lr_input, dim=0)
-            elif self_merge_behavior == 'sum':
+            elif self.merge_behavior == 'sum':
                 # Do not perform stack and sum operation on single prompt
                 if self.num_prompts == 1:
                     lr_input = lr_input[0]
