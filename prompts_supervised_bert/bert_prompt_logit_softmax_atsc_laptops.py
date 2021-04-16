@@ -29,6 +29,8 @@ sentiment_prompts = {
 run_single_prompt = True
 run_multiple_prompts = True
 
+prompts_merge_behavior = 'sum_logits'
+
 # Training settings
 training_domain = 'laptops' # 'laptops', 'restaurants', 'joint'
 
