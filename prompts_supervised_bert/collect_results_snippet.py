@@ -16,7 +16,7 @@ random_seeds = [696, 685, 683, 682, 589]
 # path to pretrained MLM model folder or the string "bert-base-uncased"
 lm_model_paths = {
     'bert_amazon_electronics': '../progress/lm_further_pretraining_bert_amazon_electronics_bseoh_2021-03-06--18_59_53/results/checkpoint-1180388',
-    #'bert-base-uncased': 'bert-base-uncased'
+    'bert-base-uncased': 'bert-base-uncased'
 }
 
 # Prompts to be added to the end of each review text
@@ -42,28 +42,54 @@ if testing_domain != training_domain:
     cross_domain = True
 else:
     cross_domain = False
+    
+experiment_id_prefix_complete = []
+    
+if run_single_prompt:    
+    for config in tqdm.tqdm(itertools.product(lm_model_paths.keys(), sentiment_prompts.keys())):
+        
+        lm_model_name, prompt_key = config
+        
+        # We will use the following string ID to identify this particular (training) experiments
+        # in directory paths and other settings
+        experiment_id_config = experiment_id_prefix + '_'
+        experiment_id_config = experiment_id_config + testing_domain + '_'
+        
+        if cross_domain:
+            experiment_id_config = experiment_id_config + 'cross_domain_'
 
-for config in tqdm.tqdm(itertools.product(lm_model_paths.keys(), sentiment_prompts.keys())):
-    
-    lm_model_name, prompt_key = config
-    
-    # We will use the following string ID to identify this particular (training) experiments
-    # in directory paths and other settings
-    experiment_id_config = experiment_id_prefix + '_'
-    experiment_id_config = experiment_id_config + testing_domain + '_'
-    
-    if cross_domain:
-        experiment_id_config = experiment_id_config + 'cross_domain_'
+        experiment_id_config = experiment_id_config + lm_model_name + '_'
+        experiment_id_config = experiment_id_config + 'single_prompt' + '_'
+        experiment_id_config = experiment_id_config + prompt_key + '_'
+        
+        experiment_id_prefix_complete.append(experiment_id_config)
 
-    experiment_id_config = experiment_id_config + lm_model_name + '_'
-    experiment_id_config = experiment_id_config + 'single_prompt' + '_'
-    experiment_id_config = experiment_id_config + prompt_key + '_'
+if run_multiple_prompts:
+    for config in tqdm.tqdm(itertools.product(lm_model_paths.keys())):
+        
+        lm_model_name = config[0]
+        
+        # We will use the following string ID to identify this particular (training) experiments
+        # in directory paths and other settings
+        experiment_id_config = experiment_id_prefix + '_'
+        experiment_id_config = experiment_id_config + testing_domain + '_'
+        
+        if cross_domain:
+            experiment_id_config = experiment_id_config + 'cross_domain_'
+
+        experiment_id_config = experiment_id_config + lm_model_name + '_'
+        experiment_id_config = experiment_id_config + 'multiple_prompts' + '_'
+        
+        experiment_id_prefix_complete.append(experiment_id_config)
+    
+
+for prefix in experiment_id_prefix_complete:
     
     test_metrics_all = []
 
     for seed in random_seeds:
         
-        experiment_id = experiment_id_config + str(seed)
+        experiment_id = prefix + str(seed)
         
         # trained_models_prompts
         test_metrics_ = os.path.join('..', 'trained_models_prompts', experiment_id)
@@ -75,7 +101,7 @@ for config in tqdm.tqdm(itertools.product(lm_model_paths.keys(), sentiment_promp
 
     test_metrics_all = pd.DataFrame(test_metrics_all)
     
-    print(experiment_id_config)
+    print(prefix)
 
     print(test_metrics_all)
 
