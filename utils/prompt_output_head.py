@@ -87,12 +87,14 @@ class SinglePromptLogitSentimentClassificationHead(MultiPromptLogitSentimentClas
 
 
 class MultiPromptSentimentClassificationHead(torch.nn.Module):
-    def __init__(self, lm, num_class, num_prompts, target_token_id=-1):
+    def __init__(self, lm, num_class, num_prompts, target_token_id=-1,
+                 merge_behavior='concatenate'):
         super(MultiPromptSentimentClassificationHead, self).__init__()
 
         self.num_class = num_class
         self.num_prompts = num_prompts
         self.target_token_id = target_token_id
+        self.merge_behavior = merge_behavior
 
         self.lm = lm
         
@@ -148,7 +150,15 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
             for j in range(self.num_prompts):
                 lr_input.append(lm_outputs["hidden_states"][-1][i+real_batch_size*j][target_indexes[i+real_batch_size*j]])
               
-            lr_input = torch.cat(lr_input, dim=0)
+            if self.merge_behavior == 'concatenate':
+                lr_input = torch.cat(lr_input, dim=0)
+            elif self_merge_behavior == 'sum':
+                # Do not perform stack and sum operation on single prompt
+                if self.num_prompts == 1:
+                    lr_input = lr_input[0]
+                else:
+                    lr_input = torch.stack(lr_input, dim=0)
+                    lr_input = torch.sum(lr_input, dim=0)
 
             lr_inputs_batch.append(lr_input)
 
