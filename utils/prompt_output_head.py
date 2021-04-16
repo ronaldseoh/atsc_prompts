@@ -26,7 +26,7 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
 
     def forward(self, reviews_and_prompts):
 
-        # Figures out where the mask token was placed
+        # Figure out where the mask token was placed
         if self.lm_type == 'bert':
             # For BERT, we need to find the token in each input with [MASK]
             target_indexes = torch.nonzero(
@@ -41,8 +41,6 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
             target_indexes = []
 
             # For GPT-2, we need to find the spot right after the input text
-            # for example in reviews_and_prompts:
-            #     target_indexes.append(len(example['input_ids'][0]) - 1)
             n = reviews_and_prompts.data["input_ids"].shape[0]
             t = torch.tensor([reviews_and_prompts.data["input_ids"].shape[1]-1])
             target_indexes = torch.cat(n*[t])
@@ -111,7 +109,7 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
 
         lr_inputs_batch = []
 
-        # Figures out where the mask token was placed
+        # Figure out where the mask token was placed
         if self.lm_type == 'bert':
             # For BERT, we need to find the token in each input with [MASK]
             target_indexes = torch.nonzero(
@@ -126,8 +124,6 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
             target_indexes = []
 
             # For GPT-2, we need to find the spot right after the input text
-            # for example in reviews_and_prompts:
-            #     target_indexes.append(len(example['input_ids'][0]) - 1)
             n = reviews_and_prompts.data["input_ids"].shape[0]
             t = torch.tensor([reviews_and_prompts.data["input_ids"].shape[1]-1])
             target_indexes = torch.cat(n*[t])
@@ -140,11 +136,8 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
             lr_input = []
 
             for j in range(self.num_prompts):
-                #if self.lm_type == 'bert':
                 lr_input.append(lm_outputs["hidden_states"][-1][i+real_batch_size*j][target_indexes[i+real_batch_size*j]])
-                # elif self.lm_type == 'gpt2':
-                #     lr_input.append(lm_outputs[i+real_batch_size*j]["hidden_states"][-1][0][target_indexes[i+real_batch_size*j]])
-                    
+              
             lr_input = torch.cat(lr_input, dim=0)
 
             lr_inputs_batch.append(lr_input)
