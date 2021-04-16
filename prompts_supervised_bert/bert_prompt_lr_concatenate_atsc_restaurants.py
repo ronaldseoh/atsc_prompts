@@ -8,6 +8,8 @@ import tqdm
 # experiment id prefix
 experiment_id_prefix = 'bert_prompt_lr_atsc'
 
+experiment_id_prefix_override = 'bert_prompt_lr_concatenate_atsc'
+
 # Random seed
 random_seeds = [696, 685, 683, 682, 589]
 
@@ -28,8 +30,10 @@ sentiment_prompts = {
 run_single_prompt = True
 run_multiple_prompts = True
 
+prompts_merge_behavior = 'concatenate'
+
 # Training settings
-training_domain = 'laptops' # 'laptops', 'restaurants', 'joint'
+training_domain = 'restaurants' # 'laptops', 'restaurants', 'joint'
 
 # Test settings
 testing_batch_size = 32
@@ -41,7 +45,7 @@ else:
     cross_domain = False
 
 # Results directory path
-results_path = 'results_' + experiment_id_prefix + '_' + testing_domain
+results_path = 'results_' + experiment_id_prefix_override + '_' + testing_domain
 os.makedirs(results_path, exist_ok=True)
 
 # Run single prompt experiments first
@@ -53,7 +57,7 @@ if run_single_prompt:
         
         # We will use the following string ID to identify this particular (training) experiments
         # in directory paths and other settings
-        experiment_id = experiment_id_prefix + '_'
+        experiment_id = experiment_id_prefix_override + '_'
         experiment_id = experiment_id + testing_domain + '_'
         
         if cross_domain:
@@ -74,7 +78,8 @@ if run_single_prompt:
             'training_domain': training_domain,
             'sentiment_prompts': [sentiment_prompts[prompt_key]],
             'testing_batch_size': testing_batch_size,
-            'testing_domain': testing_domain
+            'testing_domain': testing_domain,
+            'prompts_merge_behavior': prompts_merge_behavior
         }
 
         papermill.execute_notebook(
@@ -95,7 +100,7 @@ if run_multiple_prompts:
         
         # We will use the following string ID to identify this particular (training) experiments
         # in directory paths and other settings
-        experiment_id = experiment_id_prefix + '_'
+        experiment_id = experiment_id_prefix_override + '_'
         experiment_id = experiment_id + testing_domain + '_'
         
         if cross_domain:
@@ -115,7 +120,8 @@ if run_multiple_prompts:
             'sentiment_prompts': [sentiment_prompts[prompt_key] for prompt_key in sentiment_prompts.keys()],
             'training_domain': training_domain,
             'testing_batch_size': testing_batch_size,
-            'testing_domain': testing_domain
+            'testing_domain': testing_domain,
+            'prompts_merge_behavior': prompts_merge_behavior
         }
 
         papermill.execute_notebook(

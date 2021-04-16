@@ -6,9 +6,9 @@ import tqdm
 
 
 # experiment id prefix
-experiment_id_prefix = 'bert_prompt_logit_softmax_atsc'
+experiment_id_prefix = 'bert_prompt_lr_atsc'
 
-experiment_id_prefix_override = 'bert_prompt_logit_softmax_sum_probs_atsc'
+experiment_id_prefix_override = 'bert_prompt_lr_concatenate_atsc'
 
 # Random seed
 random_seeds = [696, 685, 683, 682, 589]
@@ -20,18 +20,17 @@ lm_model_paths = {
 }
 
 # Prompts to be added to the end of each review text
-# Note: pseudo-labels for each prompt should be given in the order of (positive), (negative), (neutral)
 sentiment_prompts = {
-    'i_felt': {"prompt": "I felt the {aspect} was [MASK].", "labels": ["good", "bad", "ok"]},
-    'i_like': {"prompt": "I [MASK] the {aspect}.", "labels": ["like", "dislike", "ignore"]},
-    'made_me_feel': {"prompt": "The {aspect} made me feel [MASK].", "labels": ["good", "bad", "indifferent"]},
-    'the_aspect_is': {"prompt": "The {aspect} is [MASK].", "labels": ["good", "bad", "ok"]}
+    'i_felt': "I felt the {aspect} was [MASK].",
+    'i_like': "I [MASK] the {aspect}.",
+    'made_me_feel': "The {aspect} made me feel [MASK].",
+    'the_aspect_is': "The {aspect} is [MASK]."
 }
 
 run_single_prompt = True
 run_multiple_prompts = True
 
-prompts_merge_behavior = 'sum_probabilities'
+prompts_merge_behavior = 'concatenate'
 
 # Training settings
 training_domain = 'laptops' # 'laptops', 'restaurants', 'joint'

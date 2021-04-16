@@ -8,7 +8,7 @@ import tqdm
 # experiment id prefix
 experiment_id_prefix = 'bert_prompt_logit_softmax_atsc'
 
-experiment_id_prefix_override = 'bert_prompt_logit_softmax_sum_logits_atsc'
+experiment_id_prefix_override = 'bert_prompt_logit_softmax_sum_probs_atsc'
 
 # Random seed
 random_seeds = [696, 685, 683, 682, 589]
