@@ -175,7 +175,7 @@ class NLISentimentClassificationHead(torch.nn.Module):
 
             neg_logit = torch.mean(prompts_batch[self.neg_prompt_indexes], dim=0)[1]
 
-            neu_logit = torch.min(prompts_batch, dim=0)[0][2]
+            neu_logit = torch.mean(prompts_batch, dim=0)[2]
 
             pred_logits = torch.stack([pos_logit, neg_logit, neu_logit])
             pred_logits = torch.reshape(pred_logits, (1,-1))

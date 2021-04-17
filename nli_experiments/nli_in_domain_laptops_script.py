@@ -9,7 +9,7 @@ import tqdm
 experiment_id_prefix = 'nli_supervised_in_domain'
 
 # Random seed
-random_seeds = [696]
+random_seeds = [696, 685, 683, 682, 589]
 
 # path to pretrained MLM model folder or the string "bert-base-uncased"
 nli_model_paths = {
@@ -54,7 +54,7 @@ training_domain = 'laptops' # 'laptops', 'restaurants', 'joint'
 testing_domain = 'laptops'
 
 # Test settings
-testing_batch_size = 32
+testing_batch_size = 8
 
 
 # Results directory path
