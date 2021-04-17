@@ -1,5 +1,6 @@
-    import torch    
+import torch    
 torch_device = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
+
 class MultiPromptLogitSentimentClassificationHead(torch.nn.Module): 
     def __init__(self, lm, num_class, num_prompts, pseudo_label_words, target_token_id=-1,  
                  merge_behavior='sum_logits'):  
@@ -37,10 +38,7 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
             t = (reviews_and_prompts.data["input_ids"] == self.target_token_id).int()   
             t = t * torch.arange(t.shape[1], 0, -1).to(device=torch_device) 
             target_indexes = torch.argmax(t, 1, keepdim=True) -1    
-            # For GPT-2, we need to find the spot right after the input text    
-            n = reviews_and_prompts.data["input_ids"].shape[0]  
-            t = torch.tensor([reviews_and_prompts.data["input_ids"].shape[1]-1])    
-            target_indexes = torch.cat(n*[t])   
+            
             lm_outputs = self.lm(**reviews_and_prompts) 
             real_batch_size = len(reviews_and_prompts.data["input_ids"]) // self.num_prompts    
         outputs = []    
