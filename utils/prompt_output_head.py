@@ -33,7 +33,7 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
                 self.lm.config.vocab_size, self.lm.config.hidden_size, padding_idx=self.lm.config.pad_token_id)
                 
             # Initialize the perturb embeddings with fairly small values
-            torch.nn.init.normal_(self.perturb_embeddings.weight, mean=0, std=0.0001)
+            torch.nn.init.normal_(self.perturb_embeddings.weight, mean=0, std=0.000001)
 
     def forward(self, reviews_and_prompts):
 
@@ -52,6 +52,9 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
 
                 # Get rid of the last [SEP] token in the end
                 perturb_input_ids = perturb_input_ids * (perturb_input_ids != 102)
+                
+                # Get rid of the [MASK] token as well
+                perturb_input_ids = perturb_input_ids * (perturb_input_ids != self.target_token_id)                
 
                 perturb_embeds = self.perturb_embeddings(perturb_input_ids)
                 
@@ -144,7 +147,7 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
                 self.lm.config.vocab_size, self.lm.config.hidden_size, padding_idx=self.lm.config.pad_token_id)
                 
             # Initialize the perturb embeddings with fairly small values
-            torch.nn.init.normal_(self.perturb_embeddings.weight, mean=0, std=0.0001)
+            torch.nn.init.normal_(self.perturb_embeddings.weight, mean=0, std=0.000001)
 
         # Linear layer
         if self.merge_behavior == 'concatenate':
@@ -176,6 +179,9 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
 
                 # Get rid of the last [SEP] token in the end
                 perturb_input_ids = perturb_input_ids * (perturb_input_ids != 102)
+
+                # Get rid of the [MASK] token as well
+                perturb_input_ids = perturb_input_ids * (perturb_input_ids != self.target_token_id)                
 
                 perturb_embeds = self.perturb_embeddings(perturb_input_ids)
                 
