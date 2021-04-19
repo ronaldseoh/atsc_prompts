@@ -3,7 +3,7 @@ import torch
 
 class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
     def __init__(self, lm, num_class, num_prompts, pseudo_label_words, target_token_id=-1,
-                 merge_behavior='sum_logits'):
+                 merge_behavior='sum_logits', perturb_prompts=False):
         super(MultiPromptLogitSentimentClassificationHead, self).__init__()
 
         self.num_class = num_class
@@ -11,6 +11,7 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
         self.target_token_id = target_token_id
         self.num_prompts = num_prompts
         self.merge_behavior = merge_behavior
+        self.perturb_prompts = perturb_prompts
 
         self.lm = lm
         
@@ -25,6 +26,11 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
             raise Exception('Unsupported language model type.')
             
         print("Detected LM type:", self.lm_type)
+        
+        # Additive perturbation of tokens in the prompt
+        if self.perturb_prompts:
+            self.perturb_embeddings = torch.nn.Embedding(
+                self.lm.config.vocab_size, self.lm.config.hidden_size, padding_idx=self.lm.config.pad_token_id)
 
     def forward(self, reviews_and_prompts):
 
@@ -34,7 +40,24 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
             target_indexes = torch.nonzero(
                 reviews_and_prompts.data["input_ids"] == self.target_token_id)[:, 1]
 
-            lm_outputs = self.lm(**reviews_and_prompts)
+            if self.perturb_prompts:
+                word_embeds = self.lm.bert.embeddings.word_embeddings(reviews_and_prompts.input_ids)
+
+                # Use 'token_type_ids' to find where the prompt begins (after the [SEP] token)
+                # and filter out positions that don't belong to prompts                
+                perturb_input_ids = reviews_and_prompts.input_ids * reviews_and_prompts.token_type_ids
+
+                # Get rid of the last [SEP] token in the end
+                perturb_input_ids = perturb_input_ids * (perturb_input_ids != 102)
+
+                perturb_embeds = self.perturb_embeddings(perturb_input_ids)
+                
+                lm_outputs = self.lm(
+                    inputs_embeds=word_embeds+perturb_embeds,
+                    token_type_ids=reviews_and_prompts.token_type_ids,
+                    attention_mask=reviews_and_prompts.attention_mask)
+            else:
+                lm_outputs = self.lm(**reviews_and_prompts)
 
             real_batch_size = len(reviews_and_prompts.data["input_ids"]) // self.num_prompts
 
@@ -89,13 +112,14 @@ class SinglePromptLogitSentimentClassificationHead(MultiPromptLogitSentimentClas
 
 class MultiPromptSentimentClassificationHead(torch.nn.Module):
     def __init__(self, lm, num_class, num_prompts, target_token_id=-1,
-                 merge_behavior='concatenate'):
+                 merge_behavior='concatenate', perturb_prompts=False):
         super(MultiPromptSentimentClassificationHead, self).__init__()
 
         self.num_class = num_class
         self.num_prompts = num_prompts
         self.target_token_id = target_token_id
         self.merge_behavior = merge_behavior
+        self.perturb_prompts = perturb_prompts
 
         self.lm = lm
         
@@ -110,6 +134,11 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
             raise Exception('Unsupported language model type.')
 
         print("Detected LM type:", self.lm_type)
+
+        # Additive perturbation of tokens in the prompt
+        if self.perturb_prompts:
+            self.perturb_embeddings = torch.nn.Embedding(
+                self.lm.config.vocab_size, self.lm.config.hidden_size, padding_idx=self.lm.config.pad_token_id)
 
         # Linear layer
         if self.merge_behavior == 'concatenate':
@@ -131,10 +160,28 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
             # For BERT, we need to find the token in each input with [MASK]
             target_indexes = torch.nonzero(
                 reviews_and_prompts.data["input_ids"] == self.target_token_id)[:, 1]
+                
+            if self.perturb_prompts:
+                word_embeds = self.lm.bert.embeddings.word_embeddings(reviews_and_prompts.input_ids)
 
-            lm_outputs = self.lm(**reviews_and_prompts, output_hidden_states=True)
+                # Use 'token_type_ids' to find where the prompt begins (after the [SEP] token)
+                # and filter out positions that don't belong to prompts                
+                perturb_input_ids = reviews_and_prompts.input_ids * reviews_and_prompts.token_type_ids
 
-            real_batch_size = len(reviews_and_prompts.data["input_ids"]) // self.num_prompts
+                # Get rid of the last [SEP] token in the end
+                perturb_input_ids = perturb_input_ids * (perturb_input_ids != 102)
+
+                perturb_embeds = self.perturb_embeddings(perturb_input_ids)
+                
+                lm_outputs = self.lm(
+                    inputs_embeds=word_embeds+perturb_embeds,
+                    token_type_ids=reviews_and_prompts.token_type_ids,
+                    attention_mask=reviews_and_prompts.attention_mask,
+                    output_hidden_states=True)
+            else:
+                lm_outputs = self.lm(**reviews_and_prompts, output_hidden_states=True)
+
+            real_batch_size = len(reviews_and_prompts.input_ids) // self.num_prompts
 
         elif self.lm_type == 'gpt2':
             lm_outputs = []
