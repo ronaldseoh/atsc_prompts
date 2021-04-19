@@ -32,8 +32,8 @@ class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
             self.perturb_embeddings = torch.nn.Embedding(
                 self.lm.config.vocab_size, self.lm.config.hidden_size, padding_idx=self.lm.config.pad_token_id)
                 
-            # Initialize the perturb embeddings with fairly small values
-            torch.nn.init.normal_(self.perturb_embeddings.weight, mean=0, std=0.000001)
+            # Initialize the perturb embeddings with zeros
+            torch.nn.init.zeros_(self.perturb_embeddings.weight)
 
     def forward(self, reviews_and_prompts):
 
@@ -146,8 +146,8 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
             self.perturb_embeddings = torch.nn.Embedding(
                 self.lm.config.vocab_size, self.lm.config.hidden_size, padding_idx=self.lm.config.pad_token_id)
                 
-            # Initialize the perturb embeddings with fairly small values
-            torch.nn.init.normal_(self.perturb_embeddings.weight, mean=0, std=0.000001)
+            # Initialize the perturb embeddings with zeros
+            torch.nn.init.zeros_(self.perturb_embeddings.weight)
 
         # Linear layer
         if self.merge_behavior == 'concatenate':
