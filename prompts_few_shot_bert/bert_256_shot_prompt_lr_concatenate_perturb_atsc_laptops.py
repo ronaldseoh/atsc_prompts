@@ -89,12 +89,12 @@ if run_single_prompt:
         }
 
         papermill.execute_notebook(
-           experiment_id_prefix + '.ipynb',
-           os.path.join(results_path, experiment_id + '.ipynb'),
-           parameters=parameters_to_inject,
-           log_output=True,
-           progress_bar=True,
-           autosave_cell_every=300  
+            os.path.join('..', 'prompts_supervised_bert', experiment_id_prefix + '.ipynb'),
+            os.path.join(results_path, experiment_id + '.ipynb'),
+            parameters=parameters_to_inject,
+            log_output=True,
+            progress_bar=True,
+            autosave_cell_every=300  
         )
 
 # Run multiple prompts

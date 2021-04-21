@@ -6,7 +6,7 @@ import tqdm
 
 
 # experiment id prefix
-experiment_id_prefix = 'bert_no_prompt_pooled_lr_atsc'
+experiment_id_prefix = 'bert_no_prompt_cls_lr_atsc'
 
 # Random seed
 random_seeds = [696, 685, 683, 682, 589]
@@ -23,7 +23,7 @@ training_domain = 'restaurants' # 'laptops', 'restaurants', 'joint'
 # Few-shot dataset size
 training_dataset_few_shot_size = 256
 
-experiment_id_prefix_override = 'bert_' + str(training_dataset_few_shot_size) + '_shot_' + 'no_prompt_pooled_lr_atsc'
+experiment_id_prefix_override = 'bert_' + str(training_dataset_few_shot_size) + '_shot_' + 'no_prompt_cls_lr_atsc'
 
 # Test settings
 testing_batch_size = 32

@@ -29,7 +29,7 @@ run_single_prompt = True
 run_multiple_prompts = True
 
 prompts_merge_behavior = 'concatenate'
-prompts_perturb = True
+prompts_perturb = False
 
 # Training settings
 training_domain = 'restaurants' # 'laptops', 'restaurants', 'joint'
@@ -37,7 +37,7 @@ training_domain = 'restaurants' # 'laptops', 'restaurants', 'joint'
 # Few-shot dataset size
 training_dataset_few_shot_size = 256
 
-experiment_id_prefix_override = 'bert_' + str(training_dataset_few_shot_size) + '_shot_' + 'prompt_lr_concatenate_perturb_atsc'
+experiment_id_prefix_override = 'bert_' + str(training_dataset_few_shot_size) + '_shot_' + 'prompt_lr_concatenate_atsc'
 
 # Test settings
 testing_batch_size = 32

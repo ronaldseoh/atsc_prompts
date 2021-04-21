@@ -35,7 +35,7 @@ else:
     cross_domain = False
 
 # Results directory path
-results_path = 'results_' + experiment_id_prefix + '_' + testing_domain
+results_path = 'results_' + experiment_id_prefix_override + '_' + testing_domain
 os.makedirs(results_path, exist_ok=True)
 
 # Run experiments
