@@ -6,10 +6,7 @@ import tqdm
 
 
 # experiment id prefix
-# experiment id prefix
 experiment_id_prefix = 'bert_prompt_lr_atsc'
-
-experiment_id_prefix_override = 'bert_prompt_lr_concatenate_perturb_atsc'
 
 # Random seed
 random_seeds = [696, 685, 683, 682, 589]
@@ -36,6 +33,11 @@ prompts_perturb = True
 
 # Training settings
 training_domain = 'laptops' # 'laptops', 'restaurants', 'joint'
+
+# Few-shot dataset size
+training_dataset_few_shot_size = 256
+
+experiment_id_prefix_override = 'bert_' + str(training_dataset_few_shot_size) + '_shot_' + 'prompt_lr_concatenate_perturb_atsc'
 
 # Test settings
 testing_batch_size = 32
@@ -79,6 +81,7 @@ if run_single_prompt:
             'lm_model_path': lm_model_paths[lm_model_name],
             'training_domain': training_domain,
             'sentiment_prompts': [sentiment_prompts[prompt_key]],
+            'training_dataset_few_shot_size': training_dataset_few_shot_size,
             'testing_batch_size': testing_batch_size,
             'testing_domain': testing_domain,
             'prompts_merge_behavior': prompts_merge_behavior,
@@ -122,6 +125,7 @@ if run_multiple_prompts:
             'lm_model_path': lm_model_paths[lm_model_name],
             'sentiment_prompts': [sentiment_prompts[prompt_key] for prompt_key in sentiment_prompts.keys()],
             'training_domain': training_domain,
+            'training_dataset_few_shot_size': training_dataset_few_shot_size,
             'testing_batch_size': testing_batch_size,
             'testing_domain': testing_domain,
             'prompts_merge_behavior': prompts_merge_behavior,
@@ -129,10 +133,10 @@ if run_multiple_prompts:
         }
 
         papermill.execute_notebook(
-           experiment_id_prefix + '.ipynb',
-           os.path.join(results_path, experiment_id + '.ipynb'),
-           parameters=parameters_to_inject,
-           log_output=True,
-           progress_bar=True,
-           autosave_cell_every=300  
+            os.path.join('..', 'prompts_supervised_bert', experiment_id_prefix + '.ipynb'),
+            os.path.join(results_path, experiment_id + '.ipynb'),
+            parameters=parameters_to_inject,
+            log_output=True,
+            progress_bar=True,
+            autosave_cell_every=300  
         )

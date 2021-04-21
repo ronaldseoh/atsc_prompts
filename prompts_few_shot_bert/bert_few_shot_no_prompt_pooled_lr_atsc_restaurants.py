@@ -14,11 +14,16 @@ random_seeds = [696, 685, 683, 682, 589]
 # path to pretrained MLM model folder or the string "bert-base-uncased"
 lm_model_paths = {
     'bert_yelp_restaurants': '../trained_models/lm_further_pretraining_bert_yelp_restaurants_bseoh_2021-03-22--15_03_31',
-    'bert-base-uncased': 'bert-base-uncased'
+    #'bert-base-uncased': 'bert-base-uncased'
 }
 
 # Training settings
 training_domain = 'restaurants' # 'laptops', 'restaurants', 'joint'
+
+# Few-shot dataset size
+training_dataset_few_shot_size = 256
+
+experiment_id_prefix_override = 'bert_' + str(training_dataset_few_shot_size) + '_shot_' + 'no_prompt_pooled_lr_atsc'
 
 # Test settings
 testing_batch_size = 32
@@ -41,7 +46,7 @@ for seed, lm_model_name in tqdm.tqdm(itertools.product(random_seeds, lm_model_pa
     
     # We will use the following string ID to identify this particular (training) experiments
     # in directory paths and other settings
-    experiment_id = experiment_id_prefix + '_'
+    experiment_id = experiment_id_prefix_override + '_'
     experiment_id = experiment_id + testing_domain + '_'
     
     if cross_domain:
@@ -58,12 +63,13 @@ for seed, lm_model_name in tqdm.tqdm(itertools.product(random_seeds, lm_model_pa
         'random_seed': seed,
         'lm_model_path': lm_model_paths[lm_model_name],
         'training_domain': training_domain,
+        'training_dataset_few_shot_size': training_dataset_few_shot_size,
         'testing_batch_size': testing_batch_size,
         'testing_domain': testing_domain
     }
 
     papermill.execute_notebook(
-       experiment_id_prefix + '.ipynb',
+       os.path.join('..', 'prompts_supervised_bert', experiment_id_prefix + '.ipynb')
        os.path.join(results_path, experiment_id + '.ipynb'),
        parameters=parameters_to_inject,
        log_output=True,
