@@ -11,7 +11,7 @@ experiment_id_prefix = 'nli_zero_shot'
 
 # path to pretrained MLM model folder or the string "bert-base-uncased"
 nli_model_paths = {
-    'MNLI-base': 'textattack/bert-base-uncased-MNLI'
+    'yelp-pretrained': '..\progress\yelp-1-epoch\checkpoint-553363'
 }
 
 # Prompts to be added to the end of each review text
