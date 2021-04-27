@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=nli_in_domain_restaurants
-#SBATCH -o gypsum_logs/stdout/nli_in_domain_restaurants.txt
-#SBATCH -e gypsum_logs/stderr/nli_in_domain_restaurants.err
+#SBATCH --job-name=nli_few_cross_domain_laptops
+#SBATCH -o gypsum_logs/stdout/nli_few_cross_domain_laptops.txt
+#SBATCH -e gypsum_logs/stderr/nli_few_cross_domain_laptops.err
 #SBATCH --ntasks=1
 #SBATCH --partition=titanx-long
 #SBATCH --gres=gpu:1
@@ -11,4 +11,4 @@
 cd /mnt/nfs/work1/696ds-s21/ibirle/zero_shot_atsc/nli_experiments/
 eval "$(conda shell.bash hook)"
 conda activate zero_shot_env
-python3 nli_in_domain_restaurants_script.py
+python3 nli_few_shot_cross_domain_laptops_script.py

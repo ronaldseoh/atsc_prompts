@@ -108,7 +108,7 @@ class YelpRestaurants(datasets.GeneratorBasedBuilder):
 
         with open(filepath, encoding='utf-8') as f:
 
-            prev_sentences = []
+            prev_premise = ""
 
             for line in f:
                 review = json.loads(line)
@@ -128,7 +128,7 @@ class YelpRestaurants(datasets.GeneratorBasedBuilder):
 
                         # We only want to look at sentences that have a high polarity word in them
                         sentence_words = get_words(sentence)
-
+                        hold_prev_premise = ""
                         if any(word in sentence_words for word in pos_words) or any(word in sentence_words for word in neg_words):
 
                             # The hypothesis is the sentence with a high polarity word
@@ -145,16 +145,16 @@ class YelpRestaurants(datasets.GeneratorBasedBuilder):
                                 "label": 0
                             }
 
-                            # Neutral with the premise being the first sentence of the previous review
-                            if prev_sentences != []:
+                            # Neutral with the premise the previous review without the previous hypothesis
+                            if prev_premise != "":
                                 yield review["review_id"] + "_" + str(i) + "_neu", {
                                     "review_id": review["review_id"],
-                                    "premise": prev_sentences[0],
+                                    "premise": prev_premise,
                                     "hypothesis": hypothesis,
                                     "label": 1
                                 }
-
-                    prev_sentences = sentences
+                            hold_prev_premise = " ".join(sentences[0:i]) + " ".join(sentences[i+1:])
+                    prev_premise = hold_prev_premise
 
 
                     
