@@ -108,7 +108,7 @@ class AmazonUCSDReviews(datasets.GeneratorBasedBuilder):
 
         with open(filepath, encoding='utf-8') as f:
 
-            prev_sentences = []
+            prev_premise = ""
 
             for line in f:
                 review = json.loads(line)
@@ -125,7 +125,7 @@ class AmazonUCSDReviews(datasets.GeneratorBasedBuilder):
 
                     # We only want to look at sentences that have a high polarity word in them
                     sentence_words = get_words(sentence)
-
+                    hold_prev_premise = ""
                     if any(word in sentence_words for word in pos_words) or any(word in sentence_words for word in neg_words):
 
                         # The hypothesis is the sentence with a high polarity word
@@ -138,15 +138,15 @@ class AmazonUCSDReviews(datasets.GeneratorBasedBuilder):
                         yield i, {
                             "premise": premise,
                             "hypothesis": hypothesis,
-                            "label": 0
+                            "label": 1
                         }
 
                         # Neutral with the premise being the first sentence of the previous review
-                        if prev_sentences != []:
+                        if prev_premise != "":
                             yield i, {
-                                "premise": prev_sentences[0],
+                                "premise": prev_premise,
                                 "hypothesis": hypothesis,
-                                "label": 1
+                                "label": 2
                             }
-
-                prev_sentences = sentences
+                        hold_prev_premise = " ".join(sentences[0:i]) + " ".join(sentences[i+1:])
+                prev_premise = hold_prev_premise

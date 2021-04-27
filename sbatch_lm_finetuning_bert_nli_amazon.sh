@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=lm_finetuning_bert_nli_yelp_restaurants
-#SBATCH -o gypsum_logs/stdout/lm_finetuning_bert_nli_yelp_restaurants_%j.txt
-#SBATCH -e gypsum_logs/stderr/lm_finetuning_bert_nli_yelp_restaurants_%j.err
+#SBATCH --job-name=lm_finetuning_bert_nli_amazon
+#SBATCH -o gypsum_logs/stdout/lm_finetuning_bert_nli_amazon_%j.txt
+#SBATCH -e gypsum_logs/stderr/lm_finetuning_bert_nli_amazon_%j.err
 #SBATCH --ntasks=1
 #SBATCH --partition=1080ti-long
 #SBATCH --gres=gpu:4
