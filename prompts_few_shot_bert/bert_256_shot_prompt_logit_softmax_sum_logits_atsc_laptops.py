@@ -18,11 +18,12 @@ lm_model_paths = {
 }
 
 # Prompts to be added to the end of each review text
+# Note: pseudo-labels for each prompt should be given in the order of (positive), (negative), (neutral)
 sentiment_prompts = {
-    'i_felt': "I felt the {aspect} was [MASK].",
-    'i_like': "I [MASK] the {aspect}.",
-    'made_me_feel': "The {aspect} made me feel [MASK].",
-    'the_aspect_is': "The {aspect} is [MASK]."
+    'i_felt': {"prompt": "I felt the {aspect} was [MASK].", "labels": ["good", "bad", "ok"]},
+    'i_like': {"prompt": "I [MASK] the {aspect}.", "labels": ["like", "dislike", "ignore"]},
+    'made_me_feel': {"prompt": "The {aspect} made me feel [MASK].", "labels": ["good", "bad", "indifferent"]},
+    'the_aspect_is': {"prompt": "The {aspect} is [MASK].", "labels": ["good", "bad", "ok"]}
 }
 
 run_single_prompt = True
