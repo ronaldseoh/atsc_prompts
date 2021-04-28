@@ -30,7 +30,7 @@ run_single_prompt = True
 run_multiple_prompts = True
 
 prompts_merge_behavior = 'sum_logits'
-prompts_perturb = False
+prompts_perturb = True
 
 # Training settings
 training_domain = 'restaurants' # 'laptops', 'restaurants', 'joint'
@@ -38,7 +38,7 @@ training_domain = 'restaurants' # 'laptops', 'restaurants', 'joint'
 # Few-shot dataset size
 training_dataset_few_shot_size = 256
 
-experiment_id_prefix_override = 'bert_' + str(training_dataset_few_shot_size) + '_shot_' + 'prompt_logit_softmax_sum_logits_atsc'
+experiment_id_prefix_override = 'bert_' + str(training_dataset_few_shot_size) + '_shot_' + 'prompt_logit_softmax_sum_logits_perturb_atsc'
 
 # Test settings
 testing_batch_size = 32

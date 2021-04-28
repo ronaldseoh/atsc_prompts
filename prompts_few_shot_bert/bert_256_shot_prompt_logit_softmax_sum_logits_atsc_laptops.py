@@ -38,7 +38,7 @@ training_domain = 'laptops' # 'laptops', 'restaurants', 'joint'
 # Few-shot dataset size
 training_dataset_few_shot_size = 256
 
-experiment_id_prefix_override = 'bert_' + str(training_dataset_few_shot_size) + '_shot_' + 'prompt_logit_softmax_atsc'
+experiment_id_prefix_override = 'bert_' + str(training_dataset_few_shot_size) + '_shot_' + 'prompt_logit_softmax_sum_logits_atsc'
 
 # Test settings
 testing_batch_size = 32

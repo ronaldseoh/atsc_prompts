@@ -13,7 +13,7 @@ random_seeds = [696, 685, 683, 682, 589]
 
 # path to pretrained MLM model folder or the string "bert-base-uncased"
 lm_model_paths = {
-    'bert_yelp_restaurants': '../trained_models/lm_further_pretraining_bert_yelp_restaurants_bseoh_2021-03-22--15_03_31',
+    'bert_amazon_electronics': '../progress/lm_further_pretraining_bert_amazon_electronics_bseoh_2021-03-06--18_59_53/results/checkpoint-1180388',
     #'bert-base-uncased': 'bert-base-uncased'
 }
 
@@ -30,19 +30,19 @@ run_single_prompt = True
 run_multiple_prompts = True
 
 prompts_merge_behavior = 'sum_logits'
-prompts_perturb = False
+prompts_perturb = True
 
 # Training settings
-training_domain = 'restaurants' # 'laptops', 'restaurants', 'joint'
+training_domain = 'laptops' # 'laptops', 'restaurants', 'joint'
 
 # Few-shot dataset size
 training_dataset_few_shot_size = 256
 
-experiment_id_prefix_override = 'bert_' + str(training_dataset_few_shot_size) + '_shot_' + 'prompt_logit_softmax_sum_logits_atsc'
+experiment_id_prefix_override = 'bert_' + str(training_dataset_few_shot_size) + '_shot_' + 'prompt_logit_softmax_sum_logits_perturb_atsc'
 
 # Test settings
 testing_batch_size = 32
-testing_domain = 'restaurants'
+testing_domain = 'laptops'
 
 if testing_domain != training_domain:
     cross_domain = True
@@ -55,7 +55,6 @@ os.makedirs(results_path, exist_ok=True)
 
 # Run single prompt experiments first
 if run_single_prompt:
-    
     print("Running single prompts...")
     print()
 
@@ -96,7 +95,7 @@ if run_single_prompt:
             parameters=parameters_to_inject,
             log_output=True,
             progress_bar=True,
-            autosave_cell_every=300
+            autosave_cell_every=300  
         )
 
 # Run multiple prompts
@@ -140,5 +139,5 @@ if run_multiple_prompts:
             parameters=parameters_to_inject,
             log_output=True,
             progress_bar=True,
-            autosave_cell_every=300
+            autosave_cell_every=300  
         )
