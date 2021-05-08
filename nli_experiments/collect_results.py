@@ -4,15 +4,16 @@ import json
 import ast
 import numpy as np
 
-file_names = glob.glob(r"C:\Users\ibirl\Documents\dsProjects\zero_shot_atsc\zero_shot_atsc\nli_experiments\results_nli_few_shot_in_domain_restaurants\*")
+file_names = glob.glob(r"/home/ian/Desktop/School/zero_shot/zero_shot_atsc/nli_experiments/results_nli_few_shot_in_domain_restaurants/*")
 print(len(file_names))
 
 
 line_start = "{'accuracy':"
-dic_list = []
+file_lists = {}
 
 for f_name in file_names:
 
+    print(f_name)
     file = open(f_name, 'r')
     lines = file.readlines()
     metrics=[]
@@ -21,17 +22,19 @@ for f_name in file_names:
             #print(line)
             metrics.append(line)
     dic = ast.literal_eval(metrics[0].strip()[1:-3])
-    dic_list.append(dic)
+    group_name = f_name[0:-10]
+    if group_name not in file_lists:
+        file_lists[group_name] = []
+
+    file_lists[group_name].append(dic)
     #print(dic)
     #print(dic['accuracy'])
     #print(os.path.basename(f_name) + metrics[0])
-
-for i in range(15):
-    if(i%5==0):
-        print()
-        print()
-        print()
-    experiment = dic_list[(i*5):((i+1)*5)]
+for key in file_lists:
+    print()
+    print()
+    print()
+    experiment = file_lists[key]
     accs = []
     f1s = []
     for e in experiment:
@@ -47,5 +50,5 @@ for i in range(15):
     f1_se = f1s.std() / np.sqrt(5)
 
     results = {'acc_mean' : acc_mean, 'acc_se': acc_se, 'f1s_mean': f1_mean, 'f1_se': f1_se}
-    print(file_names[i*5])
+    print(key)
     print(results)

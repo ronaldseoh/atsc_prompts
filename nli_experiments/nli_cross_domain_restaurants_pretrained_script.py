@@ -13,7 +13,7 @@ random_seeds = [696, 685, 683, 682, 589]
 
 # path to pretrained MLM model folder or the string "bert-base-uncased"
 nli_model_paths = {
-    'yelp-pretrained': '../progress/yelp_1_epoch/results/checkpoint-553363'
+    'yelp-pretrained': '../progress/yelp_2_epoch/results/checkpoint-875324'
 }
 
 # Prompts to be added to the end of each review text
