@@ -4,7 +4,7 @@ import json
 import ast
 import numpy as np
 
-file_names = glob.glob(r"/home/ian/Desktop/School/zero_shot/zero_shot_atsc/nli_experiments/results_nli_few_shot_in_domain_restaurants/*")
+file_names = glob.glob(r"/home/ian/Desktop/School/zero_shot/zero_shot_atsc/nli_experiments/results_nli_few_shot_cross_domain_restaurants/*")
 print(len(file_names))
 
 
@@ -31,9 +31,7 @@ for f_name in file_names:
     #print(dic['accuracy'])
     #print(os.path.basename(f_name) + metrics[0])
 for key in file_lists:
-    print()
-    print()
-    print()
+
     experiment = file_lists[key]
     accs = []
     f1s = []
@@ -49,6 +47,12 @@ for key in file_lists:
     f1_mean = f1s.mean()
     f1_se = f1s.std() / np.sqrt(5)
 
-    results = {'acc_mean' : acc_mean, 'acc_se': acc_se, 'f1s_mean': f1_mean, 'f1_se': f1_se}
-    print(key)
-    print(results)
+    results = {'acc_mean' : acc_mean, 'acc_se': acc_se, 'f1_mean': f1_mean, 'f1_se': f1_se}
+    print()
+    print(key[-30:])
+    print("acc_mean: " + str(results['acc_mean']))
+    print("acc_se: " + str(results['acc_se']))
+    print("f1_mean: " + str(results['f1_mean']))
+    print("f1_se: " + str(results['f1_se']))
+    print()
+    #print(results)

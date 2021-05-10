@@ -12,7 +12,7 @@ experiment_id_prefix = 'nli_few_shot_cross_domain'
 random_seeds = [696, 685, 683, 682, 589]
 
 #Few shot sizes
-sample_sizes = [16, 64, 256]
+sample_sizes = [1024]
 
 # path to pretrained MLM model folder or the string "bert-base-uncased"
 nli_model_paths = {
