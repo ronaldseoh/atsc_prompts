@@ -13,16 +13,16 @@ random_seeds = [696]
 
 # path to pretrained MLM model folder or the string "bert-base-uncased"
 lm_model_paths = {
-    'gpt2_yelp_restaurants': 'checkpoint-1210520',
+    'gpt2_yelp_restaurants': '/mnt/nfs/scratch1/mtak/checkpoint-1210520',
     'gpt2': 'gpt2'
 }
 
 # Prompts to be added to the end of each review text
 # Note: pseudo-labels for each prompt should be given in the order of (positive), (negative), (neutral)
 sentiment_prompts = {
-    'i_felt': {"prompt": "I felt the {aspect} was ", "labels": ["good", "bad", "ok"]},
-    'made_me_feel': {"prompt": "The {aspect} made me feel ", "labels": ["good", "bad", "indifferent"]},
-    'the_aspect_is': {"prompt": "The {aspect} is ", "labels": ["good", "bad", "ok"]}
+    'i_felt': {"prompt": " I felt the {aspect} was", "labels": [" good", " bad", " ok"]},
+    'made_me_feel': {"prompt": " The {aspect} made me feel", "labels": [" good", " bad", " indifferent"]},
+    'the_aspect_is': {"prompt": " The {aspect} is", "labels": [" good", " bad", " ok"]}
 }
 
 # Test settings

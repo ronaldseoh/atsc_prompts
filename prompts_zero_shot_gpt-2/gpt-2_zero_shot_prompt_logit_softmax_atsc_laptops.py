@@ -20,9 +20,9 @@ lm_model_paths = {
 # Prompts to be added to the end of each review text
 # Note: pseudo-labels for each prompt should be given in the order of (positive), (negative), (neutral)
 sentiment_prompts = {
-    'i_felt': {"prompt": "I felt the {aspect} was ", "labels": ["good", "bad", "ok"]},
-    'made_me_feel': {"prompt": "The {aspect} made me feel ", "labels": ["good", "bad", "indifferent"]},
-    'the_aspect_is': {"prompt": "The {aspect} is ", "labels": ["good", "bad", "ok"]}
+    'i_felt': {"prompt": " I felt the {aspect} was", "labels": [" good", " bad", " ok"]},
+    'made_me_feel': {"prompt": " The {aspect} made me feel", "labels": [" good", " bad", " indifferent"]},
+    'the_aspect_is': {"prompt": " The {aspect} is", "labels": [" good", " bad", " ok"]}
 }
 
 # Test settings
