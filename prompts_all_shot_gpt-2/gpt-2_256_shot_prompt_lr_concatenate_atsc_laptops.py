@@ -25,8 +25,8 @@ sentiment_prompts = {
     'the_aspect_is': {"prompt": " The {aspect} is", "labels": [" good", " bad", " ok"]}
 }
 
-run_single_prompt = True
-run_multiple_prompts = False
+run_single_prompt = False
+run_multiple_prompts = True
 
 prompts_merge_behavior = 'concatenate'
 prompts_perturb = False

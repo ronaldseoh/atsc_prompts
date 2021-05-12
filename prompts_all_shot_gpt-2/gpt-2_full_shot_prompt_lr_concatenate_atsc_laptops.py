@@ -25,8 +25,8 @@ sentiment_prompts = {
     'the_aspect_is': {"prompt": " The {aspect} is", "labels": [" good", " bad", " ok"]}
 }
 
-run_single_prompt = True
-run_multiple_prompts = False
+run_single_prompt = False
+run_multiple_prompts = True
 
 prompts_merge_behavior = 'concatenate'
 prompts_perturb = False
@@ -35,7 +35,7 @@ prompts_perturb = False
 training_domain = 'laptops' # 'laptops', 'restaurants', 'joint'
 
 # Few-shot dataset size
-training_dataset_few_shot_size = 3045
+training_dataset_few_shot_size = None
 
 experiment_id_prefix_override = 'gpt2_' + str(training_dataset_few_shot_size) + '_shot_' + 'prompt_lr_concatenate_atsc'
 
