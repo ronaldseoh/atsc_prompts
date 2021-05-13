@@ -13,8 +13,8 @@ random_seeds = [696, 685, 683, 682, 589]
 
 # path to pretrained MLM model folder or the string "bert-base-uncased"
 lm_model_paths = {
-    'bert_yelp_restaurants': '../trained_models/lm_further_pretraining_bert_yelp_restaurants_bseoh_2021-03-22--15_03_31',
-    #'bert-base-uncased': 'bert-base-uncased'
+    #'bert_yelp_restaurants': '../trained_models/lm_further_pretraining_bert_yelp_restaurants_bseoh_2021-03-22--15_03_31',
+    'bert-base-uncased': 'bert-base-uncased'
 }
 
 # Prompts to be added to the end of each review text
@@ -38,7 +38,7 @@ training_domain = 'restaurants' # 'laptops', 'restaurants', 'joint'
 # Few-shot dataset size
 training_dataset_few_shot_size = 256
 
-experiment_id_prefix_override = 'bert_' + str(training_dataset_few_shot_size) + '_shot_' + 'prompt_logit_softmax_sum_logits_atsc'
+experiment_id_prefix_override = 'bert_' + str(training_dataset_few_shot_size) + '_shot_' + 'prompt_logit_softmax_atsc'
 
 # Test settings
 testing_batch_size = 32

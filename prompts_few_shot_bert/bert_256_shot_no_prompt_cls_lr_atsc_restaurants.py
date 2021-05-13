@@ -13,8 +13,8 @@ random_seeds = [696, 685, 683, 682, 589]
 
 # path to pretrained MLM model folder or the string "bert-base-uncased"
 lm_model_paths = {
-    'bert_yelp_restaurants': '../trained_models/lm_further_pretraining_bert_yelp_restaurants_bseoh_2021-03-22--15_03_31',
-    #'bert-base-uncased': 'bert-base-uncased'
+    #'bert_yelp_restaurants': '../trained_models/lm_further_pretraining_bert_yelp_restaurants_bseoh_2021-03-22--15_03_31',
+    'bert-base-uncased': 'bert-base-uncased'
 }
 
 # Training settings

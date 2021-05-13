@@ -13,8 +13,8 @@ random_seeds = [696, 685, 683, 682, 589]
 
 # path to pretrained MLM model folder or the string "bert-base-uncased"
 lm_model_paths = {
-    'bert_yelp_restaurants': '../trained_models/lm_further_pretraining_bert_yelp_restaurants_bseoh_2021-03-22--15_03_31',
-    #'bert-base-uncased': 'bert-base-uncased'
+    #'bert_yelp_restaurants': '../trained_models/lm_further_pretraining_bert_yelp_restaurants_bseoh_2021-03-22--15_03_31',
+    'bert-base-uncased': 'bert-base-uncased'
 }
 
 # Prompts to be added to the end of each review text
@@ -26,7 +26,7 @@ sentiment_prompts = {
 }
 
 run_single_prompt = True
-run_multiple_prompts = True
+run_multiple_prompts = False
 
 prompts_merge_behavior = 'concatenate'
 prompts_perturb = False
@@ -57,6 +57,8 @@ if run_single_prompt:
     
     print("Running single prompts...")
     print()
+    
+    random_seeds = [696, 685, 683]
 
     for seed, lm_model_name, prompt_key in tqdm.tqdm(itertools.product(random_seeds, lm_model_paths.keys(), sentiment_prompts.keys())):
         
@@ -102,6 +104,8 @@ if run_single_prompt:
 if run_multiple_prompts:
     print("Running multiple prompts...")
     print()
+    
+    random_seeds = [696, 685, 683, 682, 589]
 
     for seed, lm_model_name in tqdm.tqdm(itertools.product(random_seeds, lm_model_paths.keys())):
         

@@ -13,8 +13,8 @@ random_seeds = [696, 685, 683, 682, 589]
 
 # path to pretrained MLM model folder or the string "bert-base-uncased"
 lm_model_paths = {
-    'bert_amazon_electronics': '../progress/lm_further_pretraining_bert_amazon_electronics_bseoh_2021-03-06--18_59_53/results/checkpoint-1180388',
-    #'bert-base-uncased': 'bert-base-uncased'
+    #'bert_amazon_electronics': '../progress/lm_further_pretraining_bert_amazon_electronics_bseoh_2021-03-06--18_59_53/results/checkpoint-1180388',
+    'bert-base-uncased': 'bert-base-uncased'
 }
 
 # Prompts to be added to the end of each review text
