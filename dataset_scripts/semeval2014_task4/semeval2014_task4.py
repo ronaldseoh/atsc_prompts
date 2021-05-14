@@ -46,6 +46,7 @@ class SemEval2014Task4Config(datasets.BuilderConfig):
     """ BuilderConfig for NewDataset"""
 
     remove_conflicting: bool = True
+    use_aspect_categories: bool = False
 
 class SemEval2014Task4Dataset(datasets.GeneratorBasedBuilder):
     """Sentihood dataset main class."""
@@ -59,7 +60,9 @@ class SemEval2014Task4Dataset(datasets.GeneratorBasedBuilder):
     BUILDER_CONFIGS = [
         # Default configuration should have the same 'name' as the dataset
         SemEval2014Task4Config(
-            name="SemEval2014Task4Dataset", version=VERSION, remove_conflicting=True, description="SemEval 2014 Task 4 Dataset - Rows with conflict labels removed."),
+            name="SemEval2014Task4Dataset", version=VERSION, remove_conflicting=True, use_aspect_categories=False, description="SemEval 2014 Task 4 (Subtask 2: Aspect term polarity) Dataset - Rows with conflict labels removed."),
+        SemEval2014Task4Config(
+            name="SemEval2014Task4Dataset - Subtask 4", version=VERSION, remove_conflicting=True, use_aspect_categories=True, description="SemEval 2014 Task 4 (Subtask 4: Aspect category polarity) Dataset - Rows with conflict labels removed."),
     ]
 
     def _info(self):
@@ -109,9 +112,16 @@ class SemEval2014Task4Dataset(datasets.GeneratorBasedBuilder):
 
             sentence_text = s.find('text').text
             aspect_term_sentiment = []
+            
+            if self.config.use_aspect_categories:
+                aspect_iterator = s.iter('aspectCategory')
+                term_key = 'category'
+            else:
+                aspect_iterator = s.iter('aspectTerm')
+                term_key = 'term'
 
-            for o in s.iter('aspectTerm'):
-                aspect_term = o.get('term')
+            for o in aspect_iterator:
+                aspect_term = o.get(term_key)
                 sentiment = o.get('polarity')
 
                 # Deal with "conflict" labels
