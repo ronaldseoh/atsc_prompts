@@ -89,10 +89,11 @@ for sample_size, seed, nli_model_name, prompt_key, testing_domain in tqdm.tqdm(i
     }
 
     papermill.execute_notebook(
-       'nli_few_shot_experiment_template.ipynb',
+       'nli_subtask4_template.ipynb',
        os.path.join(results_path, experiment_id + '.ipynb'),
        parameters=parameters_to_inject,
        log_output=True,
        progress_bar=True,
+       kernel_name='python3',
        autosave_cell_every=300
     )

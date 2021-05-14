@@ -1,0 +1,53 @@
+0it [00:00, ?it/s]
+Executing:   0%|          | 0/26 [00:00<?, ?cell/s][A
+Executing:   4%|▍         | 1/26 [00:01<00:48,  1.94s/cell][A
+Executing:   8%|▊         | 2/26 [00:02<00:33,  1.40s/cell][A
+Executing:  12%|█▏        | 3/26 [00:02<00:23,  1.03s/cell][A
+Executing:  15%|█▌        | 4/26 [00:02<00:16,  1.31cell/s][A
+Executing:  19%|█▉        | 5/26 [00:02<00:12,  1.74cell/s][A
+Executing:  23%|██▎       | 6/26 [00:02<00:08,  2.25cell/s][A
+Executing:  27%|██▋       | 7/26 [00:02<00:06,  2.85cell/s][A[W Context.cpp:69] Warning: torch.set_deterministic is in beta, and its design and  functionality may change in the future. (function operator())
+
+Executing:  31%|███       | 8/26 [00:19<01:34,  5.23s/cell][A
+Executing:  35%|███▍      | 9/26 [00:19<01:03,  3.71s/cell][A
+Executing:  38%|███▊      | 10/26 [00:21<00:50,  3.19s/cell][A
+Executing:  42%|████▏     | 11/26 [00:21<00:34,  2.28s/cell][A
+Executing:  46%|████▌     | 12/26 [00:21<00:22,  1.64s/cell][AReusing dataset sem_eval2014_task4_dataset (../dataset_cache/sem_eval2014_task4_dataset/SemEval2014Task4Dataset - Subtask 4/0.0.1/537edd3b5fdbdb1f3190419cf0a53a4fab3537bc666f17c8c75fa8d0b554e529)
+
+
+Executing:  50%|█████     | 13/26 [00:22<00:18,  1.45s/cell][A
+Executing:  54%|█████▍    | 14/26 [00:23<00:12,  1.06s/cell][A
+Executing:  58%|█████▊    | 15/26 [00:23<00:08,  1.28cell/s][A
+Executing:  62%|██████▏   | 16/26 [00:23<00:07,  1.31cell/s][AExecuting:  62%|██████▏   | 16/26 [00:25<00:16,  1.60s/cell]
+0it [00:26, ?it/s]
+Traceback (most recent call last):
+  File "nli_subtask4_script.py", line 98, in <module>
+    autosave_cell_every=300
+  File "/home/ibirle/miniconda3/envs/zero_shot_env/lib/python3.6/site-packages/papermill/execute.py", line 122, in execute_notebook
+    raise_for_execution_errors(nb, output_path)
+  File "/home/ibirle/miniconda3/envs/zero_shot_env/lib/python3.6/site-packages/papermill/execute.py", line 234, in raise_for_execution_errors
+    raise error
+papermill.exceptions.PapermillExecutionError: 
+---------------------------------------------------------------------------
+Exception encountered at "In [9]":
+---------------------------------------------------------------------------
+IndexError                                Traceback (most recent call last)
+<ipython-input-9-176630fae4dd> in <module>
+----> 1 print(test_set[0])
+
+~/miniconda3/envs/zero_shot_env/lib/python3.6/site-packages/datasets/arrow_dataset.py in __getitem__(self, key)
+   1085             format_columns=self._format_columns,
+   1086             output_all_columns=self._output_all_columns,
+-> 1087             format_kwargs=self._format_kwargs,
+   1088         )
+   1089 
+
+~/miniconda3/envs/zero_shot_env/lib/python3.6/site-packages/datasets/arrow_dataset.py in _getitem(self, key, format_type, format_columns, output_all_columns, format_kwargs)
+    950                 key = self.num_rows + key
+    951             if key >= self.num_rows or key < 0:
+--> 952                 raise IndexError(f"Index ({key}) outside of table length ({self.num_rows}).")
+    953 
+    954             # Check if we need to convert indices
+
+IndexError: Index (0) outside of table length (0).
+
