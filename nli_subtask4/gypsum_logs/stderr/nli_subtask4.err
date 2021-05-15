@@ -1,25 +1,25 @@
 0it [00:00, ?it/s]
 Executing:   0%|          | 0/26 [00:00<?, ?cell/s][A
-Executing:   4%|▍         | 1/26 [00:01<00:48,  1.94s/cell][A
-Executing:   8%|▊         | 2/26 [00:02<00:33,  1.40s/cell][A
-Executing:  12%|█▏        | 3/26 [00:02<00:23,  1.03s/cell][A
-Executing:  15%|█▌        | 4/26 [00:02<00:16,  1.31cell/s][A
-Executing:  19%|█▉        | 5/26 [00:02<00:12,  1.74cell/s][A
-Executing:  23%|██▎       | 6/26 [00:02<00:08,  2.25cell/s][A
-Executing:  27%|██▋       | 7/26 [00:02<00:06,  2.85cell/s][A[W Context.cpp:69] Warning: torch.set_deterministic is in beta, and its design and  functionality may change in the future. (function operator())
+Executing:   4%|▍         | 1/26 [00:02<00:50,  2.01s/cell][A
+Executing:   8%|▊         | 2/26 [00:02<00:34,  1.45s/cell][A
+Executing:  12%|█▏        | 3/26 [00:02<00:24,  1.06s/cell][A
+Executing:  15%|█▌        | 4/26 [00:02<00:18,  1.18cell/s][A
+Executing:  19%|█▉        | 5/26 [00:02<00:13,  1.55cell/s][A
+Executing:  23%|██▎       | 6/26 [00:02<00:10,  1.99cell/s][A
+Executing:  27%|██▋       | 7/26 [00:03<00:07,  2.54cell/s][A[W Context.cpp:69] Warning: torch.set_deterministic is in beta, and its design and  functionality may change in the future. (function operator())
 
-Executing:  31%|███       | 8/26 [00:19<01:34,  5.23s/cell][A
-Executing:  35%|███▍      | 9/26 [00:19<01:03,  3.71s/cell][A
-Executing:  38%|███▊      | 10/26 [00:21<00:50,  3.19s/cell][A
-Executing:  42%|████▏     | 11/26 [00:21<00:34,  2.28s/cell][A
-Executing:  46%|████▌     | 12/26 [00:21<00:22,  1.64s/cell][AReusing dataset sem_eval2014_task4_dataset (../dataset_cache/sem_eval2014_task4_dataset/SemEval2014Task4Dataset - Subtask 4/0.0.1/537edd3b5fdbdb1f3190419cf0a53a4fab3537bc666f17c8c75fa8d0b554e529)
+Executing:  31%|███       | 8/26 [00:06<00:22,  1.25s/cell][A
+Executing:  35%|███▍      | 9/26 [00:06<00:15,  1.09cell/s][A
+Executing:  38%|███▊      | 10/26 [00:06<00:11,  1.39cell/s][A
+Executing:  42%|████▏     | 11/26 [00:06<00:08,  1.84cell/s][A
+Executing:  46%|████▌     | 12/26 [00:07<00:05,  2.38cell/s][AReusing dataset sem_eval2014_task4_dataset (../dataset_cache/sem_eval2014_task4_dataset/SemEval2014Task4Dataset - Subtask 4/0.0.1/537edd3b5fdbdb1f3190419cf0a53a4fab3537bc666f17c8c75fa8d0b554e529)
 
 
-Executing:  50%|█████     | 13/26 [00:22<00:18,  1.45s/cell][A
-Executing:  54%|█████▍    | 14/26 [00:23<00:12,  1.06s/cell][A
-Executing:  58%|█████▊    | 15/26 [00:23<00:08,  1.28cell/s][A
-Executing:  62%|██████▏   | 16/26 [00:23<00:07,  1.31cell/s][AExecuting:  62%|██████▏   | 16/26 [00:25<00:16,  1.60s/cell]
-0it [00:26, ?it/s]
+Executing:  50%|█████     | 13/26 [00:07<00:05,  2.51cell/s][A
+Executing:  54%|█████▍    | 14/26 [00:07<00:03,  3.11cell/s][A
+Executing:  58%|█████▊    | 15/26 [00:07<00:02,  3.74cell/s][A
+Executing:  62%|██████▏   | 16/26 [00:08<00:03,  3.23cell/s][AExecuting:  62%|██████▏   | 16/26 [00:09<00:06,  1.66cell/s]
+0it [00:10, ?it/s]
 Traceback (most recent call last):
   File "nli_subtask4_script.py", line 98, in <module>
     autosave_cell_every=300
