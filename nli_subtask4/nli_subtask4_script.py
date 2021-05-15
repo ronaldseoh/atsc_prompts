@@ -46,7 +46,7 @@ neg_prompt_indexes = {
 }
 
 # Training settings
-testing_domains = ['laptops', 'restaurants']
+testing_domain = 'restaurants'
 
 # Test settings
 testing_batch_size = 8
@@ -61,7 +61,7 @@ os.makedirs(results_path, exist_ok=True)
 print("Running experiments...")
 print()
 
-for sample_size, seed, nli_model_name, prompt_key, testing_domain in tqdm.tqdm(itertools.product(sample_sizes, random_seeds, nli_model_paths.keys(), sentiment_prompts.keys(), testing_domains)):
+for sample_size, seed, nli_model_name, prompt_key in tqdm.tqdm(itertools.product(sample_sizes, random_seeds, nli_model_paths.keys(), sentiment_prompts.keys())):
 
     # We will use the following string ID to identify this particular (training) experiments
     # in directory paths and other settings
