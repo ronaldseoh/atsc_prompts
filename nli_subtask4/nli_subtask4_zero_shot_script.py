@@ -6,7 +6,7 @@ import tqdm
 
 
 # experiment id prefix
-experiment_id_prefix = 'nli_supervised_in_domain'
+experiment_id_prefix = 'nli_zero_shot_in_domain'
 
 # Random seed
 random_seeds = [696, 685, 683, 682, 589]
@@ -64,7 +64,6 @@ for seed, nli_model_name, prompt_key in tqdm.tqdm(itertools.product(random_seeds
     # in directory paths and other settings
     experiment_id = experiment_id_prefix + '_'
     experiment_id = experiment_id + testing_domain + '_'
-
     experiment_id = experiment_id + nli_model_name + '_'
     experiment_id = experiment_id + prompt_key + '_'
     experiment_id = experiment_id + str(seed)
@@ -85,7 +84,7 @@ for seed, nli_model_name, prompt_key in tqdm.tqdm(itertools.product(random_seeds
     }
 
     papermill.execute_notebook(
-       'nli_subtask4_template.ipynb',
+       'nli_subtask4_zero_shot_template.ipynb',
        os.path.join(results_path, experiment_id + '.ipynb'),
        parameters=parameters_to_inject,
        log_output=True,
