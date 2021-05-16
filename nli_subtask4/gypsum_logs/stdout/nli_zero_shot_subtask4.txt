@@ -44,3 +44,9 @@ Running experiment  nli_zero_shot_in_domain_restaurants_MNLI-base_the_aspect_is_
 
 Running experiment  nli_zero_shot_in_domain_restaurants_MNLI-base_I_like_589
 
+Running experiment  nli_zero_shot_in_domain_restaurants_MNLI-base_made_me_feel_589
+
+Running experiment  nli_zero_shot_in_domain_restaurants_MNLI-base_I_felt_589
+
+Running experiment  nli_zero_shot_in_domain_restaurants_MNLI-base_multi_prompt_589
+
