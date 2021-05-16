@@ -80,8 +80,7 @@ for seed, nli_model_name, prompt_key in tqdm.tqdm(itertools.product(random_seeds
         'pos_prompt_indexes': pos_prompt_indexes[prompt_key],
         'neg_prompt_indexes': neg_prompt_indexes[prompt_key],
         'testing_batch_size': testing_batch_size,
-        'testing_domain': testing_domain,
-        'sample_size': sample_size
+        'testing_domain': testing_domain
     }
 
     papermill.execute_notebook(
