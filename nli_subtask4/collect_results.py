@@ -4,7 +4,7 @@ import json
 import ast
 import numpy as np
 
-file_names = glob.glob(r"/home/ian/Desktop/School/zero_shot/zero_shot_atsc/nli_subtask4/results_nli_few_shot_in_domain/*")
+file_names = glob.glob(r"/home/ian/Desktop/School/zero_shot/zero_shot_atsc/nli_subtask4/results_nli_zero_shot_in_domain/*")
 print(len(file_names))
 
 
