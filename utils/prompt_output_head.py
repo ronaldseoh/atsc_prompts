@@ -258,3 +258,72 @@ class NoPromptSentimentClassificationHead(torch.nn.Module):
         outputs = self.linear(last_hidden_state_cls)
 
         return outputs
+
+    
+class NLISentimentClassificationHead(torch.nn.Module):
+    def __init__(self, nli_model, num_prompts, pos_prompt_indexes, neg_prompt_indexes):
+        super(NLISentimentClassificationHead, self).__init__()
+        
+        self.num_prompts = num_prompts
+        self.nli_model = nli_model
+        
+        self.pos_prompt_indexes = pos_prompt_indexes
+        self.neg_prompt_indexes = neg_prompt_indexes
+        
+    def forward(self, reviews_and_prompts):
+        
+        nli_output = self.nli_model(**reviews_and_prompts)["logits"]
+
+        outputs = torch.Tensor().to(self.nli_model.device)
+
+        # Text Attack NLI Labels: 0-> Contradiction, 1-> Entailment, 2-> Neutral
+        # Sentiment Polarity Labels: 0-> Positive, 1-> Negative, 2-> Neutral
+        for i in range(len(nli_output)//self.num_prompts):
+            prompts_batch = nli_output[i*self.num_prompts:(i+1)*self.num_prompts]
+
+            pos_logit = torch.mean(prompts_batch[self.pos_prompt_indexes], dim=0)[1]
+
+            neg_logit = torch.mean(prompts_batch[self.neg_prompt_indexes], dim=0)[1]
+
+            neu_logit = torch.mean(prompts_batch, dim=0)[2]
+
+            pred_logits = torch.stack([pos_logit, neg_logit, neu_logit])
+            pred_logits = torch.reshape(pred_logits, (1,-1))
+
+            outputs = torch.cat([outputs, pred_logits])
+
+        return outputs
+
+class NLIMinSentimentClassificationHead(torch.nn.Module):
+    def __init__(self, nli_model, num_prompts, pos_prompt_indexes, neg_prompt_indexes):
+        super(NLIMinSentimentClassificationHead, self).__init__()
+        
+        self.num_prompts = num_prompts
+        self.nli_model = nli_model
+        
+        self.pos_prompt_indexes = pos_prompt_indexes
+        self.neg_prompt_indexes = neg_prompt_indexes
+        
+    def forward(self, reviews_and_prompts):
+        
+        nli_output = self.nli_model(**reviews_and_prompts)["logits"]
+
+        outputs = torch.Tensor().to(self.nli_model.device)
+
+        # Text Attack NLI Labels: 0-> Contradiction, 1-> Entailment, 2-> Neutral
+        # Sentiment Polarity Labels: 0-> Positive, 1-> Negative, 2-> Neutral
+        for i in range(len(nli_output)//self.num_prompts):
+            prompts_batch = nli_output[i*self.num_prompts:(i+1)*self.num_prompts]
+
+            pos_logit = torch.mean(prompts_batch[self.pos_prompt_indexes], dim=0)[1]
+
+            neg_logit = torch.mean(prompts_batch[self.neg_prompt_indexes], dim=0)[1]
+
+            neu_logit = torch.min(prompts_batch, dim=0)[0][2]
+
+            pred_logits = torch.stack([pos_logit, neg_logit, neu_logit])
+            pred_logits = torch.reshape(pred_logits, (1,-1))
+
+            outputs = torch.cat([outputs, pred_logits])
+
+        return outputs

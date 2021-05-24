@@ -139,3 +139,4 @@ trained_models/
 progress/
 .vscode/
 *.lock
+bert_base_uncased-MNLI/

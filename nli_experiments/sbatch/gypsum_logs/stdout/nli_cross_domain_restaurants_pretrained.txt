@@ -1,0 +1,16 @@
+Running experiments...
+
+Running experiment  nli_supervised_cross_domain_restaurants_yelp-pretrained_the_aspect_is_696
+
+Running experiment  nli_supervised_cross_domain_restaurants_yelp-pretrained_I_like_696
+
+Running experiment  nli_supervised_cross_domain_restaurants_yelp-pretrained_made_me_feel_696
+
+Running experiment  nli_supervised_cross_domain_restaurants_yelp-pretrained_I_felt_696
+
+Running experiment  nli_supervised_cross_domain_restaurants_yelp-pretrained_multi_prompt_696
+
+Running experiment  nli_supervised_cross_domain_restaurants_yelp-pretrained_the_aspect_is_685
+
+Running experiment  nli_supervised_cross_domain_restaurants_yelp-pretrained_I_like_685
+

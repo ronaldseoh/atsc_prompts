@@ -3,12 +3,18 @@ from .prompt_output_head import (
     MultiPromptSentimentClassificationHead,
     SinglePromptLogitSentimentClassificationHead,
     MultiPromptLogitSentimentClassificationHead,
-    NoPromptSentimentClassificationHead)
+    NoPromptSentimentClassificationHead,
+    NLISentimentClassificationHead,
+    NLIMinSentimentClassificationHead)
+
 
 __all__ = (
     DataCollatorForSmartMLM,
     MultiPromptSentimentClassificationHead,
     SinglePromptLogitSentimentClassificationHead,
     MultiPromptLogitSentimentClassificationHead,
-    NoPromptSentimentClassificationHead
+    NoPromptSentimentClassificationHead,
+    NLISentimentClassificationHead,
+    NLIMinSentimentClassificationHead
 )
+
