@@ -1,13 +1,18 @@
 import torch
 
 
-class SinglePromptLogitSentimentClassificationHead(torch.nn.Module):
-    def __init__(self, lm, num_class, pseudo_label_words, target_token_id=-1):
-        super(SinglePromptLogitSentimentClassificationHead, self).__init__()
+class MultiPromptLogitSentimentClassificationHead(torch.nn.Module):
+    def __init__(self, lm, num_class, num_prompts, pseudo_label_words, target_token_id=-1,
+                 merge_behavior='sum_logits', perturb_prompts=False):
+
+        super(MultiPromptLogitSentimentClassificationHead, self).__init__()
 
         self.num_class = num_class
         self.pseudo_label_words = pseudo_label_words
         self.target_token_id = target_token_id
+        self.num_prompts = num_prompts
+        self.merge_behavior = merge_behavior
+        self.perturb_prompts = perturb_prompts
 
         self.lm = lm
         
@@ -22,42 +27,108 @@ class SinglePromptLogitSentimentClassificationHead(torch.nn.Module):
             raise Exception('Unsupported language model type.')
             
         print("Detected LM type:", self.lm_type)
+        
+        # Additive perturbation of tokens in the prompt
+        if self.perturb_prompts:
+            self.perturb_embeddings = torch.nn.Embedding(
+                self.lm.config.vocab_size, self.lm.config.hidden_size, padding_idx=self.lm.config.pad_token_id)
+                
+            # Initialize the perturb embeddings with zeros
+            torch.nn.init.zeros_(self.perturb_embeddings.weight)
 
     def forward(self, reviews_and_prompts):
 
+        # Figure out where the mask token was placed
         if self.lm_type == 'bert':
-            # Figures out where the mask token was placed
-            target_indexes = (reviews_and_prompts.data["input_ids"] == self.target_token_id)
+            # For BERT, we need to find the token in each input with [MASK]
+            target_indexes = torch.nonzero(
+                reviews_and_prompts.data["input_ids"] == self.target_token_id)[:, 1]
 
-            lm_outputs = self.lm(**reviews_and_prompts)
+            if self.perturb_prompts:
+                word_embeds = self.lm.bert.embeddings.word_embeddings(reviews_and_prompts.input_ids)
 
-            outputs = lm_outputs.logits[target_indexes]
-        
-            outputs = outputs[:, self.pseudo_label_words]
-            
+                # Use 'token_type_ids' to find where the prompt begins (after the [SEP] token)
+                # and filter out positions that don't belong to prompts                
+                perturb_input_ids = reviews_and_prompts.input_ids * reviews_and_prompts.token_type_ids
+
+                # Get rid of the last [SEP] token in the end
+                perturb_input_ids = perturb_input_ids * (perturb_input_ids != 102)
+                
+                # Get rid of the [MASK] token as well
+                perturb_input_ids = perturb_input_ids * (perturb_input_ids != self.target_token_id)                
+
+                perturb_embeds = self.perturb_embeddings(perturb_input_ids)
+                
+                lm_outputs = self.lm(
+                    inputs_embeds=word_embeds+perturb_embeds,
+                    token_type_ids=reviews_and_prompts.token_type_ids,
+                    attention_mask=reviews_and_prompts.attention_mask)
+            else:
+                lm_outputs = self.lm(**reviews_and_prompts)
+
+            real_batch_size = len(reviews_and_prompts.data["input_ids"]) // self.num_prompts
+
         elif self.lm_type == 'gpt2':
-            
-            outputs = []
-            
-            for example in reviews_and_prompts:
-                lm_outputs = self.lm(**example, return_dict=True)
-                
-                lm_predictions = lm_outputs.logits[0, len(example['input_ids'][0]) - 1, self.pseudo_label_words]
-                
-                outputs.append(lm_predictions)
+            lm_outputs = []
+            target_indexes = []
 
-            outputs = torch.stack(outputs, dim=0)
+            # For GPT-2, we need to find the spot right of the last token before <|endoftext|>
+            t = (reviews_and_prompts.data["input_ids"] == self.target_token_id).int()
+            t = t.cpu() * torch.arange(t.shape[1], 0, -1).cpu()
+            target_indexes = torch.argmax(t.cpu(), 1, keepdim=False) -1
+            
+            lm_outputs = self.lm(**reviews_and_prompts) 
+            real_batch_size = len(reviews_and_prompts.data["input_ids"]) // self.num_prompts
 
+        outputs = []
+                
+        for i in range(real_batch_size):
+            scores_batch = []
+
+            for j in range(self.num_prompts):
+                if self.merge_behavior == 'sum_logits':
+                    # logit output assigned to self.pseudo_label_words
+                    logits = lm_outputs.logits[i+real_batch_size*j, target_indexes[i+real_batch_size*j], self.pseudo_label_words[j]]
+                    
+                    scores_batch.append(logits)
+
+                elif self.merge_behavior == 'sum_probabilities':
+                    probabilities = torch.nn.functional.softmax(
+                        lm_outputs.logits[i+real_batch_size*j, target_indexes[i+real_batch_size*j]], dim=-1)
+
+                    probs_pseudo_labels = probabilities[self.pseudo_label_words[j]]
+
+                    scores_batch.append(probs_pseudo_labels)
+                
+            # Sum up the scores across rows
+            scores_batch = torch.stack(scores_batch, dim=0)
+            scores_batch = torch.sum(scores_batch, dim=0)
+            
+            outputs.append(scores_batch)
+
+        outputs = torch.stack(outputs, dim=0)
+            
         return outputs
+
+        
+        
+class SinglePromptLogitSentimentClassificationHead(MultiPromptLogitSentimentClassificationHead):
+    def __init__(self, lm, num_class, pseudo_label_words, target_token_id=-1):
+        
+        super().__init__(lm, num_class, 1, [pseudo_label_words], target_token_id)
 
 
 class MultiPromptSentimentClassificationHead(torch.nn.Module):
-    def __init__(self, lm, num_class, num_prompts, target_token_id=-1):
+    def __init__(self, lm, num_class, num_prompts, target_token_id=-1,
+                 merge_behavior='concatenate', perturb_prompts=False):
+
         super(MultiPromptSentimentClassificationHead, self).__init__()
 
         self.num_class = num_class
         self.num_prompts = num_prompts
         self.target_token_id = target_token_id
+        self.merge_behavior = merge_behavior
+        self.perturb_prompts = perturb_prompts
 
         self.lm = lm
         
@@ -73,9 +144,21 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
 
         print("Detected LM type:", self.lm_type)
 
+        # Additive perturbation of tokens in the prompt
+        if self.perturb_prompts:
+            self.perturb_embeddings = torch.nn.Embedding(
+                self.lm.config.vocab_size, self.lm.config.hidden_size, padding_idx=self.lm.config.pad_token_id)
+                
+            # Initialize the perturb embeddings with zeros
+            torch.nn.init.zeros_(self.perturb_embeddings.weight)
+
         # Linear layer
-        self.linear = torch.nn.Linear(
-            self.num_prompts * self.lm.config.hidden_size, self.num_class)
+        if self.merge_behavior == 'concatenate':
+            self.linear = torch.nn.Linear(
+                self.num_prompts * self.lm.config.hidden_size, self.num_class)
+        elif self.merge_behavior == 'sum':
+            self.linear = torch.nn.Linear(
+                self.lm.config.hidden_size, self.num_class)
 
     def forward(self, reviews_and_prompts):
 
@@ -84,27 +167,48 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
 
         lr_inputs_batch = []
 
-        # Figures out where the mask token was placed
+        # Figure out where the mask token was placed
         if self.lm_type == 'bert':
             # For BERT, we need to find the token in each input with [MASK]
             target_indexes = torch.nonzero(
                 reviews_and_prompts.data["input_ids"] == self.target_token_id)[:, 1]
+                
+            if self.perturb_prompts:
+                word_embeds = self.lm.bert.embeddings.word_embeddings(reviews_and_prompts.input_ids)
 
-            lm_outputs = self.lm(**reviews_and_prompts, output_hidden_states=True)
+                # Use 'token_type_ids' to find where the prompt begins (after the [SEP] token)
+                # and filter out positions that don't belong to prompts                
+                perturb_input_ids = reviews_and_prompts.input_ids * reviews_and_prompts.token_type_ids
 
-            real_batch_size = len(reviews_and_prompts.data["input_ids"]) // self.num_prompts
+                # Get rid of the last [SEP] token in the end
+                perturb_input_ids = perturb_input_ids * (perturb_input_ids != 102)
+
+                # Get rid of the [MASK] token as well
+                perturb_input_ids = perturb_input_ids * (perturb_input_ids != self.target_token_id)                
+
+                perturb_embeds = self.perturb_embeddings(perturb_input_ids)
+                
+                lm_outputs = self.lm(
+                    inputs_embeds=word_embeds+perturb_embeds,
+                    token_type_ids=reviews_and_prompts.token_type_ids,
+                    attention_mask=reviews_and_prompts.attention_mask,
+                    output_hidden_states=True)
+            else:
+                lm_outputs = self.lm(**reviews_and_prompts, output_hidden_states=True)
+
+            real_batch_size = len(reviews_and_prompts.input_ids) // self.num_prompts
 
         elif self.lm_type == 'gpt2':
             lm_outputs = []
             target_indexes = []
 
-            # For GPT-2, we need to find the spot right after the input text
-            for example in reviews_and_prompts:
-                target_indexes.append(len(example['input_ids'][0]) - 1)
+            # For GPT-2, we need to find the spot right of the last token before <|endoftext|>  
+            t = (reviews_and_prompts.data["input_ids"] == self.target_token_id).int()
+            t = t * torch.arange(t.shape[1], 0, -1).cpu()
+            target_indexes = torch.argmax(t, 1, keepdim=False) -1
 
-                lm_outputs.append(self.lm(**example, output_hidden_states=True))
-
-            real_batch_size = len(reviews_and_prompts) // self.num_prompts
+            lm_outputs = self.lm(**reviews_and_prompts) 
+            real_batch_size = len(reviews_and_prompts.data["input_ids"]) // self.num_prompts    
                 
         for i in range(real_batch_size):
             # Create an input to self.linear by
@@ -112,12 +216,17 @@ class MultiPromptSentimentClassificationHead(torch.nn.Module):
             lr_input = []
 
             for j in range(self.num_prompts):
-                if self.lm_type == 'bert':
-                    lr_input.append(lm_outputs["hidden_states"][-1][i+real_batch_size*j][target_indexes[i+real_batch_size*j]])
-                elif self.lm_type == 'gpt2':
-                    lr_input.append(lm_outputs[i+real_batch_size*j]["hidden_states"][-1][0][target_indexes[i+real_batch_size*j]])
-                    
-            lr_input = torch.cat(lr_input, dim=0)
+                lr_input.append(lm_outputs["hidden_states"][-1][i+real_batch_size*j][target_indexes[i+real_batch_size*j]])
+              
+            if self.merge_behavior == 'concatenate':
+                lr_input = torch.cat(lr_input, dim=0)
+            elif self.merge_behavior == 'sum':
+                # Do not perform stack and sum operation on single prompt
+                if self.num_prompts == 1:
+                    lr_input = lr_input[0]
+                else:
+                    lr_input = torch.stack(lr_input, dim=0)
+                    lr_input = torch.sum(lr_input, dim=0)
 
             lr_inputs_batch.append(lr_input)
 
@@ -149,6 +258,7 @@ class NoPromptSentimentClassificationHead(torch.nn.Module):
         outputs = self.linear(last_hidden_state_cls)
 
         return outputs
+
     
 class NLISentimentClassificationHead(torch.nn.Module):
     def __init__(self, nli_model, num_prompts, pos_prompt_indexes, neg_prompt_indexes):
