@@ -18,6 +18,19 @@ If you want to try training your own prompt-based ATSC model, you will probably 
 
 - Each `prompts_zero_shot_*` directory contains the notebook files for testing zero-shot cases.
 
+# Citation
+
+If you are using our code for your paper, please cite our paper using the following BibTeX entry:
+
+```
+@inproceedings{seoh2021emnlp,
+  title={Open Aspect Target Sentiment Classification with Natural Language Prompts},
+  author={Ronald Seoh, Ian Birle, Mrinal Tak, Haw-Shiuan Chang, Brian Pinette, Alfred Hough},
+  booktitle={EMNLP},
+  year={2021},
+}
+```
+
 # License
 
 `atsc_prompts` is licensed under the Apache 2.0 license. Please check `LICENSE`.
