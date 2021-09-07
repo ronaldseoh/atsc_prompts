@@ -18,7 +18,7 @@ If you want to try training your own prompt-based ATSC model, you will probably 
 
 - Each `prompts_zero_shot_*` directory contains the notebook files for testing zero-shot cases.
 
-# Citation
+## Citation
 
 If you are using our code for your paper, please cite our paper using the following BibTeX entry:
 
@@ -31,6 +31,6 @@ If you are using our code for your paper, please cite our paper using the follow
 }
 ```
 
-# License
+## License
 
 `atsc_prompts` is licensed under the Apache 2.0 license. Please check `LICENSE`.
