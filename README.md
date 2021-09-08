@@ -14,9 +14,11 @@ If you want to try training your own prompt-based ATSC model, you will probably 
 
 - `pretraining` contains the Jupyter notebook files with the training loop for further pretraining BERT/GPT-2 LMs. As described in our paper, we modify the pretraining objective for BERT, which is implemented as a thing called "data collator" compatible with the Huggingface library (see utils/data_collator_smart_mlm.py.)
 
-- Each `prompts_supervised_*` directory contains the notebook files for full-shot/few-shot training. I recommend skimming these notebooks first. PyTorch modules for converting LM/NLI outputs to ATSC prediction are defined in [`utils/prompt_output_head.py`](https://link.iamblogger.net/jymqn).
+- `prompts_supervised_*` directories contain the notebook files for full-shot/few-shot training. I recommend skimming these notebooks first. PyTorch modules for converting LM/NLI outputs to ATSC prediction are defined in [`utils/prompt_output_head.py`](https://link.iamblogger.net/jymqn).
 
-- Each `prompts_zero_shot_*` directory contains the notebook files for testing zero-shot cases.
+- `prompts_zero_shot_*` directories contain the notebook files for testing zero-shot cases.
+
+- `prompts_subtask4_*` directories contain the notebook files for testing ATSC models on aspect category sentiment classification (ACSC) without additional training.
 
 ## Citation
 
