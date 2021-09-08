@@ -8,7 +8,7 @@ Before executing any of the codes in the repo, please set up an [Anaconda enviro
 conda env create -f environment.yml
 ```
 
-We also listed core dependencies in `requirements.txt` that you could feed into `pip`, we recommend using Anaconda and `environment.yml` as there might be dependencies that are not fully fulfilled by `requirements.txt`. 
+Although we also listed core dependencies in `requirements.txt` that you could feed into `pip`, we recommend using Anaconda and our [`environment.yml`](https://link.iamblogger.net/y4a1b) as there might be dependencies that are not fully fulfilled by [`requirements.txt`](https://link.iamblogger.net/yxicy). 
 
 If you want to try training your own prompt-based ATSC model, you will probably want to start with the directories with the prefix `prompts_supervised_`. Please refer to the descriptions below for what each directory in this repo is about:
 
