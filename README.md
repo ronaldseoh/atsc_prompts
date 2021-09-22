@@ -1,5 +1,7 @@
 # atsc_prompts
 
+<img src="figure_1.png" width="450px">
+
 This repository contains the codes used to produce the results from our paper [*Open Aspect Target Sentiment Classification with Natural Language Prompts*](https://link.iamblogger.net/atscprompts-paper).
 
 Before executing any of the codes in the repo, please set up an [Anaconda environment](https://link.iamblogger.net/2to7k) on your system by running
