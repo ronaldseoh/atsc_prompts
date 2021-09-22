@@ -1,6 +1,6 @@
 # atsc_prompts
 
-<img src="figure_1.png" width="450px">
+<img src="overview_diagram.png" width="450px">
 
 This repository contains the codes used to produce the results from our paper [*Open Aspect Target Sentiment Classification with Natural Language Prompts*](https://link.iamblogger.net/atscprompts-paper).
 
