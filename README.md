@@ -2,7 +2,7 @@
 
 <img src="overview_diagram.png" width="450px">
 
-This repository contains the codes used to produce the results from our paper [*Open Aspect Target Sentiment Classification with Natural Language Prompts*](https://link.iamblogger.net/atscprompts-paper).
+This repository contains the codes used to produce the results from our EMNLP 2021 paper [*Open Aspect Target Sentiment Classification with Natural Language Prompts*](https://link.iamblogger.net/atscprompts-paper).
 
 Before executing any of the codes in the repo, please set up an [Anaconda environment](https://link.iamblogger.net/2to7k) on your system by running
 
