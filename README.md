@@ -1,6 +1,6 @@
 # atsc_prompts
 
-<img src="overview_diagram.png" width="450px">
+<img src="overview_diagram.png" style="float: center;" width="450px">
 
 This repository contains the codes used to produce the results from our EMNLP 2021 paper [*Open Aspect Target Sentiment Classification with Natural Language Prompts*](https://link.iamblogger.net/atscprompts-paper).
 
