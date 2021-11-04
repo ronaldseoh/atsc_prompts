@@ -27,11 +27,22 @@ If you want to try training your own prompt-based ATSC model, you will probably 
 If you are using our code for your paper, please cite our paper using the following BibTeX entry:
 
 ```
-@inproceedings{seoh2021emnlp,
-  title={Open Aspect Target Sentiment Classification with Natural Language Prompts},
-  author={Ronald Seoh, Ian Birle, Mrinal Tak, Haw-Shiuan Chang, Brian Pinette, Alfred Hough},
-  booktitle={EMNLP},
-  year={2021},
+@inproceedings{seoh-etal-2021-open,
+    title = "Open Aspect Target Sentiment Classification with Natural Language Prompts",
+    author = "Seoh, Ronald  and
+      Birle, Ian  and
+      Tak, Mrinal  and
+      Chang, Haw-Shiuan  and
+      Pinette, Brian  and
+      Hough, Alfred",
+    booktitle = "Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing",
+    month = nov,
+    year = "2021",
+    address = "Online and Punta Cana, Dominican Republic",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2021.emnlp-main.509",
+    pages = "6311--6322",
+    abstract = "For many business applications, we often seek to analyze sentiments associated with any arbitrary aspects of commercial products, despite having a very limited amount of labels or even without any labels at all. However, existing aspect target sentiment classification (ATSC) models are not trainable if annotated datasets are not available. Even with labeled data, they fall short of reaching satisfactory performance. To address this, we propose simple approaches that better solve ATSC with natural language prompts, enabling the task under zero-shot cases and enhancing supervised settings, especially for few-shot cases. Under the few-shot setting for SemEval 2014 Task 4 laptop domain, our method of reformulating ATSC as an NLI task outperforms supervised SOTA approaches by up to 24.13 accuracy points and 33.14 macro F1 points. Moreover, we demonstrate that our prompts could handle implicitly stated aspects as well: our models reach about 77{\%} accuracy on detecting sentiments for aspect categories (e.g., food), which do not necessarily appear within the text, even though we trained the models only with explicitly mentioned aspect terms (e.g., fajitas) from just 16 reviews - while the accuracy of the no-prompt baseline is only around 65{\%}.",
 }
 ```
 
